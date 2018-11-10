@@ -58,15 +58,16 @@
         // load the 3D engine
         var engine = new BABYLON.Engine(canvas, true);
 
-        var options = new BABYLON.SceneOptimizerOptions();
-        options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 1));
+        // var options = new BABYLON.SceneOptimizerOptions();
+        // options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 1));
 
         // createScene function that creates and return the scene
         var createScene = function(){
             // Create the scene space
-            engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
+            //engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
             var scene = new BABYLON.Scene(engine);
-            var optimizer = new BABYLON.SceneOptimizer(scene, options);
+            //var optimizer = new BABYLON.SceneOptimizer(scene, options);
+            BABYLON.SceneOptimizer.OptimizeAsync(scene);
 
             scene.clearColor = new BABYLON.Color3( .75, .75, .75);
 
