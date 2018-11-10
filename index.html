@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>Grokking the Bloch Sphere</title>
+    <title>v0.01 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
-    <script src="js/babylon.js"></script>
-    <script src="js/babylon.gui.min.js"></script>
+    <script src="js/thirdparty/babylon.js"></script>
+    <script src="js/thirdparty/babylon.gui.min.js"></script>
+    <script src="js/complexnum.js"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -28,25 +29,25 @@
 <script>
     window.addEventListener('DOMContentLoaded', function(){
 
-        class ComplexNum {
-            constructor(real, imaginary) {
-                this.real = real;
-                this.imaginary = imaginary;
-            }
-
-            getReal() {
-                return this.real;
-            }
-
-            getImaginary() {
-                return this.imaginary;
-            }
-
-            absValue() {
-                return Math.sqrt(Math.pow(this.real, 2) +
-                    Math.pow(this.imaginary, 2));
-            }
-        }
+        // class ComplexNum {
+        //     constructor(real, imaginary) {
+        //         this.real = real;
+        //         this.imaginary = imaginary;
+        //     }
+        //
+        //     getReal() {
+        //         return this.real;
+        //     }
+        //
+        //     getImaginary() {
+        //         return this.imaginary;
+        //     }
+        //
+        //     absValue() {
+        //         return Math.sqrt(Math.pow(this.real, 2) +
+        //             Math.pow(this.imaginary, 2));
+        //     }
+        // }
 
         class QubitState {
             constructor(inclinationRadians, azimuthRadians) {
