@@ -30,7 +30,7 @@
 <script>
     window.addEventListener('DOMContentLoaded', function(){
 
-        const fontSize = 40;
+        const fontSize = 24;
 
         var qubitState = new QubitState(0, 0);
         var quantumStateGrid = new BABYLON.GUI.Grid();
@@ -58,15 +58,10 @@
         // load the 3D engine
         var engine = new BABYLON.Engine(canvas, true);
 
-        // var options = new BABYLON.SceneOptimizerOptions();
-        // options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 1));
-
         // createScene function that creates and return the scene
         var createScene = function(){
             // Create the scene space
-            //engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
             var scene = new BABYLON.Scene(engine);
-            //var optimizer = new BABYLON.SceneOptimizer(scene, options);
             BABYLON.SceneOptimizer.OptimizeAsync(scene);
 
             scene.clearColor = new BABYLON.Color3( .75, .75, .75);
@@ -183,8 +178,8 @@
             //var grid = new BABYLON.GUI.Grid();
             quantumStateGrid.background = "white";
             // quantumStateGrid.adaptWidthToChildren = true;
-            quantumStateGrid.width = "750px";
-            quantumStateGrid.height = "100px";
+            quantumStateGrid.width = "300px";
+            quantumStateGrid.height = "80px";
 
             quantumStateGrid.addColumnDefinition(0.70);
             quantumStateGrid.addColumnDefinition(0.10);
