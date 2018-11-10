@@ -2,12 +2,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>v0.01 Grokking the Bloch Sphere</title>
+    <title>v0.03 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
     <script src="js/thirdparty/babylon.gui.min.js"></script>
     <script src="js/complexnum.js"></script>
+    <script src="js/qubitstate.js"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -28,101 +29,6 @@
 <canvas id="renderCanvas"></canvas>
 <script>
     window.addEventListener('DOMContentLoaded', function(){
-
-        // class ComplexNum {
-        //     constructor(real, imaginary) {
-        //         this.real = real;
-        //         this.imaginary = imaginary;
-        //     }
-        //
-        //     getReal() {
-        //         return this.real;
-        //     }
-        //
-        //     getImaginary() {
-        //         return this.imaginary;
-        //     }
-        //
-        //     absValue() {
-        //         return Math.sqrt(Math.pow(this.real, 2) +
-        //             Math.pow(this.imaginary, 2));
-        //     }
-        // }
-
-        class QubitState {
-            constructor(inclinationRadians, azimuthRadians) {
-                this.inclinationRadians = inclinationRadians;
-                this.azimuthRadians = azimuthRadians;
-            }
-
-            setCartesianCoords(babylonAxesVector) {
-                var babylonAxisX = babylonAxesVector.x;
-                var babylonAxisY = babylonAxesVector.y;
-                var babylonAxisZ = babylonAxesVector.z;
-
-                this.inclinationRadians = Math.acos(babylonAxisY);
-                this.azimuthRadians = (Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2);
-
-                console.log("babylonAxisX: " + babylonAxisX);
-                console.log("babylonAxisY: " + babylonAxisY);
-                console.log("babylonAxisZ: " + babylonAxisZ);
-                console.log("this.inclinationRadians: " + this.inclinationRadians);
-                console.log("this.azimuthRadians: " + this.azimuthRadians);
-            }
-
-            getCartesianCoords() {
-                var babylonAxisX = Math.sin(this.inclinationRadians) *
-                    Math.sin(this.azimuthRadians);
-                var babylonAxisY = Math.cos(this.inclinationRadians);
-                var babylonAxisZ = -Math.sin(this.inclinationRadians) *
-                    Math.cos(this.azimuthRadians);
-
-                // this.inclinationRadians = Math.acos(babylonAxisY);
-                // this.azimuthRadians = Math.atan(babylonAxisX / babylonAxisZ);
-
-                return new BABYLON.Vector3(babylonAxisX, babylonAxisY, babylonAxisZ);
-            }
-
-            getProbAmplitude0() {
-                var probAmpComplex = new ComplexNum(Math.cos(this.getInclinationRadians() / 2), 0);
-                //console.log("probAmpComplex: " + probAmpComplex.getReal() + " " + probAmpComplex.getImaginary());
-                return probAmpComplex;
-            }
-
-            getProbAmplitude1() {
-                var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
-                var probAmpComplex = new ComplexNum(Math.cos(this.getAzimuthRadians()) * sinHalfIncl,
-                    Math.sin(this.getAzimuthRadians()) * sinHalfIncl);
-                console.log("probAmpComplex1: " + probAmpComplex.getReal() + " " + probAmpComplex.getImaginary());
-                console.log("this.azimuthRadians: " + this.azimuthRadians);
-                return probAmpComplex;
-            }
-
-            getProbability0() {
-                return Math.pow(this.getProbAmplitude0().absValue(), 2);
-            }
-
-            getProbability1() {
-                return Math.pow(this.getProbAmplitude1().absValue(), 2);
-            }
-
-            setInclinationRadians(inclinationRadians) {
-                this.inclinationRadians = inclinationRadians;
-            }
-
-            getInclinationRadians() {
-                return this.inclinationRadians;
-            }
-
-            setAzimuthRadians(azimuthRadians) {
-                this.azimuthRadians = (azimuthRadians + Math.PI * 2) % (Math.PI * 2);
-            }
-
-            getAzimuthRadians() {
-                return this.azimuthRadians % (Math.PI * 2);
-            }
-
-        }
 
         const fontSize = 20;
 
