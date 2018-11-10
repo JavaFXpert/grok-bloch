@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>v0.03 Grokking the Bloch Sphere</title>
+    <title>v0.04 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
@@ -30,7 +30,7 @@
 <script>
     window.addEventListener('DOMContentLoaded', function(){
 
-        const fontSize = 20;
+        const fontSize = 40;
 
         var qubitState = new QubitState(0, 0);
         var quantumStateGrid = new BABYLON.GUI.Grid();
@@ -58,11 +58,16 @@
         // load the 3D engine
         var engine = new BABYLON.Engine(canvas, true);
 
+        var options = new BABYLON.SceneOptimizerOptions();
+        options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 1));
+
         // createScene function that creates and return the scene
         var createScene = function(){
             // Create the scene space
-            //engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
+            engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
             var scene = new BABYLON.Scene(engine);
+            var optimizer = new BABYLON.SceneOptimizer(scene, options);
+
             scene.clearColor = new BABYLON.Color3( .75, .75, .75);
 
             // Add a camera to the scene and attach it to the canvas
@@ -156,8 +161,8 @@
             // Buttons, panels
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
             var UiPanel = new BABYLON.GUI.StackPanel();
-            UiPanel.width = "220px";
-            UiPanel.fontSize = "14px";
+            //UiPanel.width = "1200px";
+            //UiPanel.fontSize = "36px";
             UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
             advancedTexture.addControl(UiPanel);
@@ -177,8 +182,8 @@
             //var grid = new BABYLON.GUI.Grid();
             quantumStateGrid.background = "white";
             // quantumStateGrid.adaptWidthToChildren = true;
-            quantumStateGrid.width = "250px";
-            quantumStateGrid.height = "60px";
+            quantumStateGrid.width = "750px";
+            quantumStateGrid.height = "100px";
 
             quantumStateGrid.addColumnDefinition(0.70);
             quantumStateGrid.addColumnDefinition(0.10);
@@ -209,15 +214,16 @@
             }
 
             var rotateGroup = new BABYLON.GUI.SliderGroup("Spherical coordinates:", "S");
-            inclinationSlider =
-                rotateGroup.addSlider("Polar angle", inclination, "π radians", 0, Math.PI, 0, displayValue)
+            rotateGroup.addSlider("Polar angle", inclination, "π radians", 0, Math.PI, 0, displayValue)
             rotateGroup.addSlider("Azimuth angle", azimuth, "π radians", 0, Math.PI * 2, 0, displayValue)
 
             var selectBox = new BABYLON.GUI.SelectionPanel("sp", [rotateGroup]);
             selectBox.width = 0.35;
-            selectBox.height = 0.25;
+            selectBox.height = 0.20;
             selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
             selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+            // selectBox.fontFamily = "times new roman";
+            // selectBox.fontSize = "36pt";
 
             /* Change Color Scheme  */
             // selectBox.color = "blue";
