@@ -8,7 +8,7 @@
     <script src="js/thirdparty/babylon.js"></script>
     <script src="js/thirdparty/babylon.gui.min.js"></script>
     <script src="js/complexnum.js"></script>
-    <script src="js/qubitstate.js"></script>
+    <script src="js/blochsphere.js"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -32,25 +32,13 @@
 
         const fontSize = 24;
 
-        var qubitState = new QubitState(0, 0);
-        var quantumStateGrid = new BABYLON.GUI.Grid();
-        var quantumStateLine = null;
-        var quantumStateLineCap = null;
-        var lineColor = new BABYLON.Color3(.3, .3, .3);
-        var quantumStateLineColor = new BABYLON.Color3(0, 0, 1);
+        var blochSphere = null;
 
+        var quantumStateGrid = new BABYLON.GUI.Grid();
         var probAmplitudeTextBlock0 = new BABYLON.GUI.TextBlock();
         var probAmplitudeTextBlock1 = new BABYLON.GUI.TextBlock();
         var probabilityTextBlock0 = new BABYLON.GUI.TextBlock();
         var probabilityTextBlock1 = new BABYLON.GUI.TextBlock();
-
-        var sphere = null;
-
-        var complexNum = new ComplexNum(3, -4);
-        console.log("complexNum.absValue() = " + complexNum.absValue());
-
-
-
 
         // get the canvas DOM element
         var canvas = document.getElementById('renderCanvas');
@@ -62,6 +50,9 @@
         var createScene = function(){
             // Create the scene space
             var scene = new BABYLON.Scene(engine);
+
+            blochSphere = new BlochSphere("blochSphere", scene, 0, 0);
+
             BABYLON.SceneOptimizer.OptimizeAsync(scene);
 
             scene.clearColor = new BABYLON.Color3( .75, .75, .75);
@@ -73,92 +64,10 @@
             // Add lights to the scene
             var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
 
-            // Add and manipulate meshes in the scene
-            var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-            sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0}, scene);
-            sphere.material = myMaterial;
-            sphere.position.y = 0.0;
-            sphere.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
-
-            var equator = createEquator();
-            equator.parent = sphere;
-            equator.color = lineColor;
-
-            // var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 3, height:3}, scene)
-
-            myMaterial.alpha = 0.4;
-
-            //Array of points to construct Bloch X axis line
-            var xAxisPoints = [
-                new BABYLON.Vector3(0, 0, -1.0),
-                new BABYLON.Vector3(0, 0, 1.0)
-            ];
-
-            //Array of points to construct Bloch Y axis line
-            var yAxisPoints = [
-                new BABYLON.Vector3(-1.0, 0, 0),
-                new BABYLON.Vector3(1.0, 0, 0)
-            ];
-
-            //Array of points to construct Bloch Z axis line
-            var zAxisPoints = [
-                new BABYLON.Vector3(0, 1.0, 0),
-                new BABYLON.Vector3(0, -1.0, 0)
-            ];
-
-            //Create lines
-            var xAxisLine = BABYLON.MeshBuilder.CreateLines("xAxisLine", {points: xAxisPoints}, scene);
-            var yAxisLine = BABYLON.MeshBuilder.CreateLines("yAxisLine", {points: yAxisPoints}, scene);
-            var zAxisLine = BABYLON.MeshBuilder.CreateLines("zAxisLine", {points: zAxisPoints}, scene);
-
-            xAxisLine.color = lineColor;
-            yAxisLine.color = lineColor;
-            zAxisLine.color = lineColor;
-
-            xAxisLine.isPickable = false;
-            yAxisLine.isPickable = false;
-            zAxisLine.isPickable = false;
-
-            xAxisLine.parent = sphere;
-            yAxisLine.parent = sphere;
-            zAxisLine.parent = sphere;
-
-            // Axis labels
-            var xChar = makeTextPlane("X", "black", 0.2);
-            xChar.position = new BABYLON.Vector3(0, 0.1, -1.2);
-            xChar.isPickable = false;
-
-            var yChar = makeTextPlane("Y", "black", 0.2);
-            yChar.position = new BABYLON.Vector3(1.2, 0, 0);
-            yChar.isPickable = false;
-
-            var zeroKet = makeTextPlane("|0>", "black", 0.2);
-            zeroKet.position = new BABYLON.Vector3(0, 1.2, 0);
-            zeroKet.isPickable = false;
-
-            var oneKet = makeTextPlane("|1>", "black", 0.2);
-            oneKet.position = new BABYLON.Vector3(0, -1.2, 0);
-            oneKet.isPickable = false;
-
-            var plusKet = makeTextPlane("|+>", "black", 0.2);
-            plusKet.position = new BABYLON.Vector3(0, -0.1, -1.2);
-            plusKet.isPickable = false;
-
-            var minusKet = makeTextPlane("<-|", "black", 0.2);
-            minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
-            minusKet.isPickable = false;
-
-            //Array of points to construct quantum state line
-            var qStatePoints = [
-                new BABYLON.Vector3(0, 0, 0),
-                new BABYLON.Vector3(0, 1, 0)
-            ];
 
             // Buttons, panels
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
             var UiPanel = new BABYLON.GUI.StackPanel();
-            //UiPanel.width = "1200px";
-            //UiPanel.fontSize = "36px";
             UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
             advancedTexture.addControl(UiPanel);
@@ -194,13 +103,15 @@
 
             // Define selection panel and groups
             var inclination = function(radians) {
-                qubitState.setInclinationRadians(radians);
-                updateQuantumStateLine();
+                blochSphere.setInclinationRadians(radians);
+                blochSphere.updateQuantumStateLine();
+                updateQuantumStateDisplay();
             }
 
             var azimuth = function(radians) {
-                qubitState.setAzimuthRadians(radians);
-                updateQuantumStateLine();
+                blochSphere.setAzimuthRadians(radians);
+                blochSphere.updateQuantumStateLine();
+                updateQuantumStateDisplay();
             }
 
             var displayValue = function(value) {
@@ -221,7 +132,6 @@
             // selectBox.fontFamily = "times new roman";
             // selectBox.fontSize = "36pt";
 
-            /* Change Color Scheme  */
             // selectBox.color = "blue";
             // selectBox.background = "#FFFF99";
             // selectBox.barColor = "#4F7DF2";
@@ -234,94 +144,53 @@
             scene.onPointerObservable.add((pointerInfo) => {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
-                        if(pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == sphere) {
-                            console.log("Hi " + pointerInfo.pickInfo.pickedPoint);
+                        // TODO: Find out how to identify that sphere was picked
+                        //if(pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == sphere) {
+                        if(pointerInfo.pickInfo.hit) {
+                            console.log("pickedPoint: " + pointerInfo.pickInfo.pickedPoint);
 
-                            qubitState.setCartesianCoords(pointerInfo.pickInfo.pickedPoint);
-                            updateQuantumStateLine();
+                            blochSphere.setCartesianCoords(pointerInfo.pickInfo.pickedPoint);
+                            blochSphere.updateQuantumStateLine();
+                            updateQuantumStateDisplay();
                         }
                         break;
-                    // case BABYLON.PointerEventTypes.POINTERUP:
-                    //         updateQuantumStateLine(pointerInfo.pickInfo.pickedPoint);
-                    //     break;
-                    // case BABYLON.PointerEventTypes.POINTERMOVE:
-                    //         updateQuantumStateLine(pointerInfo.pickInfo.pickedPoint);
-                    //     break;
                 }
             });
 
-            updateQuantumStateLine();
-
-            return scene;
+            blochSphere.updateQuantumStateLine();
+            updateQuantumStateDisplay();
 
             // return the created scene
             return scene;
         }
 
-        function createEquator() {
-            var myPoints = [];
-            var radius = 1;
-            var deltaTheta = Math.PI / 20;
-            var theta = 0;
-            var Y = 0;
-            for (var i = 0; i<Math.PI * 20; i++) {
-                myPoints.push(new BABYLON.Vector3(radius * Math.cos(theta), Y, radius * Math.sin(theta)));
-                theta += deltaTheta;
-            }
-
-            //Create lines
-            var lines = BABYLON.MeshBuilder.CreateDashedLines("lines", {points: myPoints, updatable: true}, scene);
-            lines.isPickable = false;
-            return lines;
-        }
-
-        function updateQuantumStateLine() {
-            if (quantumStateLine) quantumStateLine.dispose();
-            if (quantumStateLineCap) quantumStateLineCap.dispose();
-
-            qubitStateCartesianCoords = qubitState.getCartesianCoords();
-
-            var qStatePoints = [
-                sphere.position,
-                // new BABYLON.Vector3(0, 0, 0),
-                qubitStateCartesianCoords
-            ];
-            quantumStateLine = BABYLON.MeshBuilder.CreateLines("qStatePoints", {points: qStatePoints}, scene);
-
-            // quantumStateLineCap = BABYLON.MeshBuilder.CreateSphere("quantumStateLineCap", {diameterX: 0.05, diameterY: 0.05, diameterZ: 0.05}, scene);
-            quantumStateLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumStateLineCap", {height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, scene);
-
-            quantumStateLine.color = quantumStateLineColor;
-            quantumStateLineCap.color = quantumStateLineColor;
-            quantumStateLineCap.position = qubitState.getCartesianCoords();
-            quantumStateLineCap.rotation = new BABYLON.Vector3(-qubitState.getInclinationRadians(), -qubitState.getAzimuthRadians(), 0);
-
+        function updateQuantumStateDisplay() {
             probAmplitudeTextBlock0.dispose();
 
-            var imaginary0 = qubitState.getProbAmplitude0().getImaginary();
-            var imaginary1 = qubitState.getProbAmplitude1().getImaginary();
+            var imaginary0 = blochSphere.getProbAmplitude0().getImaginary();
+            var imaginary1 = blochSphere.getProbAmplitude1().getImaginary();
 
 
-            probAmplitudeTextBlock0.text = qubitState.getProbAmplitude0().getReal().toFixed(2) +
+            probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().getReal().toFixed(2) +
                 (imaginary0 < 0 ? " - " : " + ") +
                 Math.abs(imaginary0).toFixed(2) + "i";
             probAmplitudeTextBlock0.color = "black";
             probAmplitudeTextBlock0.fontSize = fontSize;
 
             probAmplitudeTextBlock1.dispose();
-            probAmplitudeTextBlock1.text = qubitState.getProbAmplitude1().getReal().toFixed(2) +
+            probAmplitudeTextBlock1.text = blochSphere.getProbAmplitude1().getReal().toFixed(2) +
                 (imaginary1 < 0 ? " - " : " + ") +
                 Math.abs(imaginary1).toFixed(2) + "i";
             probAmplitudeTextBlock1.color = "black";
             probAmplitudeTextBlock1.fontSize = fontSize;
 
             probabilityTextBlock0.dispose();
-            probabilityTextBlock0.text = qubitState.getProbability0().toFixed(2);
+            probabilityTextBlock0.text = blochSphere.getProbability0().toFixed(2);
             probabilityTextBlock0.color = "black";
             probabilityTextBlock0.fontSize = fontSize;
 
             probabilityTextBlock1.dispose();
-            probabilityTextBlock1.text = qubitState.getProbability1().toFixed(2);
+            probabilityTextBlock1.text = blochSphere.getProbability1().toFixed(2);
             probabilityTextBlock1.color = "black";
             probabilityTextBlock1.fontSize = fontSize;
 
@@ -330,19 +199,6 @@
             quantumStateGrid.addControl(probabilityTextBlock0, 0, 2);
             quantumStateGrid.addControl(probabilityTextBlock1, 1, 2);
         }
-
-        function makeTextPlane(text, color, size) {
-            var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 50, scene, true);
-            dynamicTexture.hasAlpha = true;
-            dynamicTexture.drawText(text, 5, 40, "bold 36px Arial", color, "transparent", true);
-            var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, scene, true);
-            plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", scene);
-            plane.material.backFaceCulling = false;
-            plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
-            plane.material.diffuseTexture = dynamicTexture;
-            return plane;
-        };
-
 
         // call the createScene function
         var scene = createScene();
