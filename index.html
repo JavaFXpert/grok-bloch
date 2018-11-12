@@ -16,6 +16,8 @@
 
   TODO:
     - Add gate buttons and functionality
+    - Use min version of babylon.js
+    - Document classes
 -->
 <html>
 <head>
@@ -25,7 +27,7 @@
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
     <script src="js/thirdparty/babylon.gui.min.js"></script>
-    <script src="js/complexnum.js"></script>
+    <script src="js/thirdparty/math.min.js"></script>
     <script src="js/blochsphere.js"></script>
     <style>
         html, body {
@@ -185,18 +187,18 @@
         function updateQuantumStateDisplay() {
             probAmplitudeTextBlock0.dispose();
 
-            var imaginary0 = blochSphere.getProbAmplitude0().getImaginary();
-            var imaginary1 = blochSphere.getProbAmplitude1().getImaginary();
+            var imaginary0 = blochSphere.getProbAmplitude0().im;
+            var imaginary1 = blochSphere.getProbAmplitude1().im;
 
 
-            probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().getReal().toFixed(2) +
+            probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().re.toFixed(2) +
                 (imaginary0 < 0 ? " - " : " + ") +
                 Math.abs(imaginary0).toFixed(2) + "i";
             probAmplitudeTextBlock0.color = "black";
             probAmplitudeTextBlock0.fontSize = fontSize;
 
             probAmplitudeTextBlock1.dispose();
-            probAmplitudeTextBlock1.text = blochSphere.getProbAmplitude1().getReal().toFixed(2) +
+            probAmplitudeTextBlock1.text = blochSphere.getProbAmplitude1().re.toFixed(2) +
                 (imaginary1 < 0 ? " - " : " + ") +
                 Math.abs(imaginary1).toFixed(2) + "i";
             probAmplitudeTextBlock1.color = "black";

@@ -48,23 +48,25 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
     getProbAmplitude0() {
-        var probAmpComplex = new ComplexNum(Math.cos(this.getInclinationRadians() / 2), 0);
+        var probAmpComplex = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
         return probAmpComplex;
     }
 
     getProbAmplitude1() {
         var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
-        var probAmpComplex = new ComplexNum(Math.cos(this.getAzimuthRadians()) * sinHalfIncl,
-            Math.sin(this.getAzimuthRadians()) * sinHalfIncl);
+        var probAmpComplex = math.multiply(
+            math.complex(Math.cos(this.getAzimuthRadians()),
+                         Math.sin(this.getAzimuthRadians())),
+            sinHalfIncl);
         return probAmpComplex;
     }
 
     getProbability0() {
-        return Math.pow(this.getProbAmplitude0().absValue(), 2);
+        return Math.pow(math.abs(this.getProbAmplitude0()), 2);
     }
 
     getProbability1() {
-        return Math.pow(this.getProbAmplitude1().absValue(), 2);
+        return Math.pow(math.abs(this.getProbAmplitude1()), 2);
     }
 
     setInclinationRadians(inclinationRadians) {
