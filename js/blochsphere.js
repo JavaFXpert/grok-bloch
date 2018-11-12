@@ -85,6 +85,13 @@ class BlochSphere extends BABYLON.Mesh {
         return this.azimuthRadians % (Math.PI * 2);
     }
 
+    applyGate(gate) {
+        var currentQuantumState = math.matrix([[this.getProbability0()], [this.getProbability1()]]);
+        console.log("currentQuantumState: " + currentQuantumState);
+        var newQuantumState = math.multiply(gate, currentQuantumState);
+        console.log("newQuantumState: " + newQuantumState);
+    }
+
     /// Methods to construct the 3D Bloch sphere
     setupSphere() {
         var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
