@@ -33,8 +33,8 @@ class BlochSphere extends BABYLON.Mesh {
         var babylonAxisY = babylonAxesVector.y;
         var babylonAxisZ = babylonAxesVector.z;
 
-        this.inclinationRadians = Math.acos(babylonAxisY);
-        this.azimuthRadians = (Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2);
+        this.setInclinationRadians(Math.acos(babylonAxisY));
+        this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2));
     }
 
     getCartesianCoords() {
@@ -47,6 +47,15 @@ class BlochSphere extends BABYLON.Mesh {
         return new BABYLON.Vector3(babylonAxisX, babylonAxisY, babylonAxisZ);
     }
 
+    setProbAmplitudes(probAmp0, probAmp1) {
+        console.log("In setProbAmplitudes(), probAmp0: " + probAmp0 + ", probAmp1: " + probAmp1);
+        var inclRads = 2 * math.acos(probAmp0);
+
+        console.log("inclRads: " + inclRads);
+        this.setInclinationRadians(inclRads);
+    }
+
+    // TODO: Combine both probAmplitude methods
     getProbAmplitude0() {
         var probAmpComplex = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
         return math.round(probAmpComplex, 4);
@@ -71,6 +80,8 @@ class BlochSphere extends BABYLON.Mesh {
 
     setInclinationRadians(inclinationRadians) {
         this.inclinationRadians = inclinationRadians;
+        console.log("this.inclinationRadians: " + this.inclinationRadians);
+        this.updateQuantumStateLine();
     }
 
     getInclinationRadians() {
@@ -79,6 +90,7 @@ class BlochSphere extends BABYLON.Mesh {
 
     setAzimuthRadians(azimuthRadians) {
         this.azimuthRadians = (azimuthRadians + Math.PI * 2) % (Math.PI * 2);
+        this.updateQuantumStateLine();
     }
 
     getAzimuthRadians() {
@@ -90,6 +102,11 @@ class BlochSphere extends BABYLON.Mesh {
         console.log("currentQuantumState: " + currentQuantumState);
         var newQuantumState = math.multiply(gate.matrix, currentQuantumState);
         console.log("newQuantumState: " + newQuantumState);
+
+        var probAmp0 = math.subset(newQuantumState, math.index(0, 0));
+        var probAmp1 = math.subset(newQuantumState, math.index(1, 0));
+
+        this.setProbAmplitudes(probAmp0, probAmp1);
     }
 
     /// Methods to construct the 3D Bloch sphere
@@ -164,6 +181,8 @@ class BlochSphere extends BABYLON.Mesh {
         var minusKet = this.makeTextPlane("<-|", "black", 0.2);
         minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
         minusKet.isPickable = false;
+
+        this.updateQuantumStateLine()
     }
 
     createEquator() {

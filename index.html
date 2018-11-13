@@ -22,7 +22,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>v0.09 Grokking the Bloch Sphere</title>
+    <title>v0.091 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
@@ -272,13 +272,13 @@
             // Define selection panel and groups
             var inclination = function(radians) {
                 blochSphere.setInclinationRadians(radians);
-                blochSphere.updateQuantumStateLine();
+                //blochSphere.updateQuantumStateLine();
                 updateQuantumStateDisplay();
             }
 
             var azimuth = function(radians) {
                 blochSphere.setAzimuthRadians(radians);
-                blochSphere.updateQuantumStateLine();
+                //blochSphere.updateQuantumStateLine();
                 updateQuantumStateDisplay();
             }
 
@@ -318,14 +318,14 @@
                             console.log("pickedPoint: " + pointerInfo.pickInfo.pickedPoint);
 
                             blochSphere.setCartesianCoords(pointerInfo.pickInfo.pickedPoint);
-                            blochSphere.updateQuantumStateLine();
+                            //blochSphere.updateQuantumStateLine();
                             updateQuantumStateDisplay();
                         }
                         break;
                 }
             });
 
-            blochSphere.updateQuantumStateLine();
+            //blochSphere.updateQuantumStateLine();
             updateQuantumStateDisplay();
 
             // return the created scene
