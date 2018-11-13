@@ -49,7 +49,7 @@ class BlochSphere extends BABYLON.Mesh {
 
     getProbAmplitude0() {
         var probAmpComplex = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
-        return probAmpComplex;
+        return math.round(probAmpComplex, 4);
     }
 
     getProbAmplitude1() {
@@ -58,7 +58,7 @@ class BlochSphere extends BABYLON.Mesh {
             math.complex(Math.cos(this.getAzimuthRadians()),
                          Math.sin(this.getAzimuthRadians())),
             sinHalfIncl);
-        return probAmpComplex;
+        return math.round(probAmpComplex, 4);
     }
 
     getProbability0() {
@@ -86,9 +86,9 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
     applyGate(gate) {
-        var currentQuantumState = math.matrix([[this.getProbability0()], [this.getProbability1()]]);
+        var currentQuantumState = math.matrix([[this.getProbAmplitude0()], [this.getProbAmplitude1()]]);
         console.log("currentQuantumState: " + currentQuantumState);
-        var newQuantumState = math.multiply(gate, currentQuantumState);
+        var newQuantumState = math.multiply(gate.matrix, currentQuantumState);
         console.log("newQuantumState: " + newQuantumState);
     }
 

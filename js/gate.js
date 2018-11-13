@@ -14,8 +14,42 @@
  * limitations under the License.
  */
 class Gate {
+    constructor(matrix) {
+        this.matrix = matrix;
+    }
 
 }
 
-Gate.X = math.matrix([[0, 1],
-                      [1, 0]]);
+Gate.X = new Gate(math.matrix([
+    [0, 1],
+    [1, 0]]));
+
+Gate.Y = new Gate(math.matrix([
+    [0, math.complex(0, -1)],
+    [math.complex(0, 1), 0]]));
+
+Gate.Z = new Gate(math.matrix([
+    [1, 0],
+    [0, -1]]));
+
+Gate.H = new Gate(math.matrix([
+    [1 / math.sqrt(2), 1 / math.sqrt(2)],
+    [1 / math.sqrt(2), -1 / math.sqrt(2)]]));
+
+Gate.S = new Gate(math.matrix([
+    [1, 0],
+    [0, math.complex(0, 1)]]));
+
+Gate.St = new Gate(math.matrix([
+    [1, 0],
+    [0, math.complex(0, -1)]]));
+
+Gate.T = new Gate(math.matrix([
+    [1, 0],
+    [0, math.complex(1 / math.sqrt(2), 1 / math.sqrt(2))]]));
+
+Gate.Tt = new Gate(math.matrix([
+    [1, 0],
+    [0, math.complex(1 / math.sqrt(2), -1 / math.sqrt(2))]]));
+
+

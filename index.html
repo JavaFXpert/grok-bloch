@@ -22,7 +22,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>v0.08 Grokking the Bloch Sphere</title>
+    <title>v0.09 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
@@ -93,12 +93,17 @@
 
 
             /////// Gates panel
-            var UiPanel = new BABYLON.GUI.StackPanel();
-            UiPanel.width = "200px";
-            //UiPanel.fontSize = "14px";
-            UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-            UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-            advancedTexture.addControl(UiPanel);
+            var leftPanel = new BABYLON.GUI.StackPanel();
+            leftPanel.width = "250px";
+            leftPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+            leftPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            advancedTexture.addControl(leftPanel);
+
+            var rightPanel = new BABYLON.GUI.StackPanel();
+            rightPanel.width = "100px";
+            rightPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+            rightPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            advancedTexture.addControl(rightPanel);
 
             // TODO: Move these into styles
             var buttonSize = "65px";
@@ -112,89 +117,99 @@
                 console.log(Gate.X);
                 blochSphere.applyGate(Gate.X);
             });
-            UiPanel.addControl(xGateBtn);
+            leftPanel.addControl(xGateBtn);
 
             var yGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/y-gate.png");
             yGateBtn.paddingTop = paddingTop;
             yGateBtn.width = buttonSize;
             yGateBtn.height = buttonSize;
             yGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.Y);
+                blochSphere.applyGate(Gate.Y);
             });
-            UiPanel.addControl(yGateBtn);
+            leftPanel.addControl(yGateBtn);
 
             var zGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/z-gate.png");
             zGateBtn.paddingTop = paddingTop;
             zGateBtn.width = buttonSize;
             zGateBtn.height = buttonSize;
             zGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.Z);
+                blochSphere.applyGate(Gate.Z);
             });
-            UiPanel.addControl(zGateBtn);
+            leftPanel.addControl(zGateBtn);
 
             var hGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/h-gate.png");
             hGateBtn.paddingTop = paddingTop;
             hGateBtn.width = buttonSize;
             hGateBtn.height = buttonSize;
             hGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.H);
+                blochSphere.applyGate(Gate.H);
             });
-            UiPanel.addControl(hGateBtn);
+            leftPanel.addControl(hGateBtn);
 
             var sGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-gate.png");
             sGateBtn.paddingTop = paddingTop;
             sGateBtn.width = buttonSize;
             sGateBtn.height = buttonSize;
             sGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.S);
+                blochSphere.applyGate(Gate.S);
             });
-            UiPanel.addControl(sGateBtn);
+            rightPanel.addControl(sGateBtn);
 
             var sDagGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-dag-gate.png");
             sDagGateBtn.paddingTop = paddingTop;
             sDagGateBtn.width = buttonSize;
             sDagGateBtn.height = buttonSize;
             sDagGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.St);
+                blochSphere.applyGate(Gate.St);
             });
-            UiPanel.addControl(sDagGateBtn);
+            rightPanel.addControl(sDagGateBtn);
 
             var tGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/t-gate.png");
             tGateBtn.paddingTop = paddingTop;
             tGateBtn.width = buttonSize;
             tGateBtn.height = buttonSize;
             tGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.T);
+                blochSphere.applyGate(Gate.T);
             });
-            UiPanel.addControl(tGateBtn);
+            rightPanel.addControl(tGateBtn);
 
             var tDagGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/t-dag-gate.png");
             tDagGateBtn.paddingTop = paddingTop;
             tDagGateBtn.width = buttonSize;
             tDagGateBtn.height = buttonSize;
             tDagGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+                console.log(Gate.Tt);
+                blochSphere.applyGate(Gate.Tt);
             });
-            UiPanel.addControl(tDagGateBtn);
+            rightPanel.addControl(tDagGateBtn);
 
-            var tDagGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/t-dag-gate.png");
-            tDagGateBtn.paddingTop = paddingTop;
-            tDagGateBtn.width = buttonSize;
-            tDagGateBtn.height = buttonSize;
-            tDagGateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
-            });
-            UiPanel.addControl(tDagGateBtn);
+            /*
+             var u1GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u1-gate.png");
+             u1GateBtn.paddingTop = paddingTop;
+             u1GateBtn.width = buttonSize;
+             u1GateBtn.height = buttonSize;
+             u1GateBtn.onPointerDownObservable.add(()=> {
+                 //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+             });
+             leftPanel.addControl(u1GateBtn);
 
-            var u1GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u1-gate.png");
-            u1GateBtn.paddingTop = paddingTop;
-            u1GateBtn.width = buttonSize;
-            u1GateBtn.height = buttonSize;
-            u1GateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
-            });
-            UiPanel.addControl(u1GateBtn);
+             var u3GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u3-gate.png");
+             u3GateBtn.paddingTop = paddingTop;
+             u3GateBtn.width = buttonSize;
+             u3GateBtn.height = buttonSize;
+             u3GateBtn.onPointerDownObservable.add(()=> {
+                 //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+             });
+             leftPanel.addControl(u3GateBtn);
+             */
 
+            /*
             var u2GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u2-gate.png");
             u2GateBtn.paddingTop = paddingTop;
             u2GateBtn.width = buttonSize;
@@ -202,17 +217,17 @@
             u2GateBtn.onPointerDownObservable.add(()=> {
                 //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
             });
-            UiPanel.addControl(u2GateBtn);
+            rightPanel.addControl(u2GateBtn);
 
-            var u3GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u3-gate.png");
-            u3GateBtn.paddingTop = paddingTop;
-            u3GateBtn.width = buttonSize;
-            u3GateBtn.height = buttonSize;
-            u3GateBtn.onPointerDownObservable.add(()=> {
+            var zeroStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/zero-state.png");
+            zeroStateBtn.paddingTop = paddingTop;
+            zeroStateBtn.width = buttonSize;
+            zeroStateBtn.height = buttonSize;
+            zeroStateBtn.onPointerDownObservable.add(()=> {
                 //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
             });
-            UiPanel.addControl(u3GateBtn);
-
+            rightPanel.addControl(zeroStateBtn);
+            */
 
             /////// END Gates panel
 
