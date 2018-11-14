@@ -103,8 +103,22 @@ class BlochSphere extends BABYLON.Mesh {
         var newQuantumState = math.multiply(gate.matrix, currentQuantumState);
         console.log("newQuantumState: " + newQuantumState);
 
-        var probAmp0 = math.subset(newQuantumState, math.index(0, 0));
-        var probAmp1 = math.subset(newQuantumState, math.index(1, 0));
+        // Adjust quantum state such that coefficient of [0> is real and non-negative
+        var probAmpIm0 = math.subset(newQuantumState, math.index(0, 0)).im;
+        console.log("probAmpIm0: " + probAmpIm0);
+
+        var adjScalar = 1;
+        if (probAmpIm0 != 0) {
+            adjScalar = math.complex(0, -probAmpIm0).inverse();
+        }
+        console.log("adjScalar: " + adjScalar);
+
+        var adjQuantumState = math.multiply(adjScalar, newQuantumState);
+        console.log("adjQuantumState: " + adjQuantumState);
+
+
+        var probAmp0 = math.subset(adjQuantumState, math.index(0, 0));
+        var probAmp1 = math.subset(adjQuantumState, math.index(1, 0));
 
         this.setProbAmplitudes(probAmp0, probAmp1);
     }
