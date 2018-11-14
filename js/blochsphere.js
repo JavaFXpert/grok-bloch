@@ -50,9 +50,12 @@ class BlochSphere extends BABYLON.Mesh {
     setProbAmplitudes(probAmp0, probAmp1) {
         console.log("In setProbAmplitudes(), probAmp0: " + probAmp0 + ", probAmp1: " + probAmp1);
         var inclRads = 2 * math.acos(probAmp0);
-
         console.log("inclRads: " + inclRads);
         this.setInclinationRadians(inclRads);
+
+        // var azimRads = math.atan(probAmp1 / probAmp0);
+        // console.log("azimRads: " + azimRads);
+        // this.setAzimuthRadians(azimRads);
     }
 
     // TODO: Combine both probAmplitude methods
@@ -90,6 +93,7 @@ class BlochSphere extends BABYLON.Mesh {
 
     setAzimuthRadians(azimuthRadians) {
         this.azimuthRadians = (azimuthRadians + Math.PI * 2) % (Math.PI * 2);
+        console.log("this.azimuthRadians: " + this.azimuthRadians);
         this.updateQuantumStateLine();
     }
 
