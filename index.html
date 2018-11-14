@@ -116,6 +116,7 @@
             xGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.X);
                 blochSphere.applyGate(Gate.X);
+                updateQuantumStateDisplay();
             });
             leftPanel.addControl(xGateBtn);
 
@@ -126,6 +127,7 @@
             yGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.Y);
                 blochSphere.applyGate(Gate.Y);
+                updateQuantumStateDisplay();
             });
             leftPanel.addControl(yGateBtn);
 
@@ -136,6 +138,7 @@
             zGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.Z);
                 blochSphere.applyGate(Gate.Z);
+                updateQuantumStateDisplay();
             });
             leftPanel.addControl(zGateBtn);
 
@@ -146,6 +149,7 @@
             hGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.H);
                 blochSphere.applyGate(Gate.H);
+                updateQuantumStateDisplay();
             });
             leftPanel.addControl(hGateBtn);
 
@@ -156,6 +160,7 @@
             sGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.S);
                 blochSphere.applyGate(Gate.S);
+                updateQuantumStateDisplay();
             });
             rightPanel.addControl(sGateBtn);
 
@@ -166,6 +171,7 @@
             sDagGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.St);
                 blochSphere.applyGate(Gate.St);
+                updateQuantumStateDisplay();
             });
             rightPanel.addControl(sDagGateBtn);
 
@@ -176,6 +182,7 @@
             tGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.T);
                 blochSphere.applyGate(Gate.T);
+                updateQuantumStateDisplay();
             });
             rightPanel.addControl(tGateBtn);
 
@@ -186,6 +193,7 @@
             tDagGateBtn.onPointerDownObservable.add(()=> {
                 console.log(Gate.Tt);
                 blochSphere.applyGate(Gate.Tt);
+                updateQuantumStateDisplay();
             });
             rightPanel.addControl(tDagGateBtn);
 

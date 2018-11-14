@@ -62,8 +62,7 @@ class BlochSphere extends BABYLON.Mesh {
         var probAmp0Polar = probAmp0.toPolar();
         var probAmp1Polar = probAmp1.toPolar();
         var azimRads = (probAmp1.toPolar().phi - probAmp0.toPolar().phi);
-        //var azimRads = 2 * math.atan(probAmp1 / probAmp0) + (math.PI * 1.5) ;
-        //var azimRads = 2 * math.atan(probAmp1 / probAmp0);
+
         console.log("azimRads: " + azimRads);
         this.setAzimuthRadians(azimRads);
     }
