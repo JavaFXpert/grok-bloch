@@ -18,6 +18,9 @@ class BlochSphere extends BABYLON.Mesh {
         super(name, scene);
         this.inclinationRadians = inclinationRadians;
         this.azimuthRadians = azimuthRadians;
+        this.probAmplitude0 = math.complex(1, 0);
+        this.probAmplitude1 = math.complex(0, 0);
+
         this.scene = scene;
         this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0}, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
@@ -49,28 +52,37 @@ class BlochSphere extends BABYLON.Mesh {
 
     setProbAmplitudes(probAmp0, probAmp1) {
         console.log("In setProbAmplitudes(), probAmp0: " + probAmp0 + ", probAmp1: " + probAmp1);
+        this.probAmplitude0 = probAmp0;
+        this.probAmplitude1 = probAmp1;
+
         var inclRads = 2 * math.acos(probAmp0);
         console.log("inclRads: " + inclRads);
         this.setInclinationRadians(inclRads);
 
-        // var azimRads = math.atan(probAmp1 / probAmp0);
-        // console.log("azimRads: " + azimRads);
-        // this.setAzimuthRadians(azimRads);
+        var probAmp0Polar = probAmp0.toPolar();
+        var probAmp1Polar = probAmp1.toPolar();
+        var azimRads = (probAmp1.toPolar().phi - probAmp0.toPolar().phi);
+        //var azimRads = 2 * math.atan(probAmp1 / probAmp0) + (math.PI * 1.5) ;
+        //var azimRads = 2 * math.atan(probAmp1 / probAmp0);
+        console.log("azimRads: " + azimRads);
+        this.setAzimuthRadians(azimRads);
     }
 
     // TODO: Combine both probAmplitude methods
     getProbAmplitude0() {
-        var probAmpComplex = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
-        return math.round(probAmpComplex, 4);
+        // var probAmpComplex = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
+        // return math.round(probAmpComplex, 4);
+        return this.probAmplitude0;
     }
 
     getProbAmplitude1() {
-        var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
-        var probAmpComplex = math.multiply(
-            math.complex(Math.cos(this.getAzimuthRadians()),
-                         Math.sin(this.getAzimuthRadians())),
-            sinHalfIncl);
-        return math.round(probAmpComplex, 4);
+        // var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
+        // var probAmpComplex = math.multiply(
+        //     math.complex(Math.cos(this.getAzimuthRadians()),
+        //                  Math.sin(this.getAzimuthRadians())),
+        //     sinHalfIncl);
+        // return math.round(probAmpComplex, 4);
+        return this.probAmplitude1;
     }
 
     getProbability0() {
@@ -114,6 +126,7 @@ class BlochSphere extends BABYLON.Mesh {
         var adjScalar = 1;
         if (probAmpIm0 != 0) {
             adjScalar = math.complex(0, -probAmpIm0).inverse();
+            //adjScalar = math.complex(0, probAmpIm0).inverse();
         }
         console.log("adjScalar: " + adjScalar);
 
