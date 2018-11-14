@@ -233,7 +233,7 @@
                 updateQuantumStateDisplay();
             });
             rightPanel.addControl(zeroStateBtn);
-            
+
             /////// END Gates panel
 
 
@@ -277,14 +277,16 @@
             // Define selection panel and groups
             var inclination = function(radians) {
                 blochSphere.setInclinationRadians(radians);
-                //blochSphere.updateQuantumStateLine();
+                blochSphere.resetGlobalPhase();
+                blochSphere.updateQuantumStateLine();
                 updateQuantumStateDisplay();
             }
 
             var azimuth = function(radians) {
                 blochSphere.setAzimuthRadians(radians);
-                //blochSphere.updateQuantumStateLine();
-                updateQuantumStateDisplay();
+                blochSphere.resetGlobalPhase();
+                blochSphere.updateQuantumStateLine();
+                    updateQuantumStateDisplay();
             }
 
             var displayValue = function(value) {
@@ -338,15 +340,16 @@
         }
 
         function updateQuantumStateDisplay() {
+            blochSphere.resetGlobalPhase();
             probAmplitudeTextBlock0.dispose();
 
             var imaginary0 = blochSphere.getProbAmplitude0().im;
             var imaginary1 = blochSphere.getProbAmplitude1().im;
 
 
-            probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().re.toFixed(2) +
-                (imaginary0 < 0 ? " - " : " + ") +
-                Math.abs(imaginary0).toFixed(2) + "i";
+            probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().re.toFixed(2); // +
+                // (imaginary0 < 0 ? " - " : " + ") +
+                // Math.abs(imaginary0).toFixed(2) + "i";
             probAmplitudeTextBlock0.color = "black";
             probAmplitudeTextBlock0.fontSize = fontSize;
 

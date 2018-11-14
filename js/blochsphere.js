@@ -118,31 +118,19 @@ class BlochSphere extends BABYLON.Mesh {
         var newQuantumState = math.multiply(gate.matrix, currentQuantumState);
         console.log("newQuantumState: " + newQuantumState);
 
-        // // Adjust quantum state such that coefficient of [0> is real and non-negative
-        // var probAmpIm0 = math.subset(newQuantumState, math.index(0, 0)).im;
-        // console.log("probAmpIm0: " + probAmpIm0);
-        //
-        // var adjScalar = 1;
-        // if (probAmpIm0 != 0) {
-        //     adjScalar = math.complex(0, -probAmpIm0).inverse();
-        //     //adjScalar = math.complex(0, probAmpIm0).inverse();
-        // }
-        // console.log("adjScalar: " + adjScalar);
-        //
-        // /////TEST
-        // var pa0 = math.subset(newQuantumState, math.index(0, 0));
-        // console.log("pa0: " + pa0);
-        // var adjPa0 = math.multiply(pa0, adjScalar);
-        // console.log("adjPa0: " + adjPa0);
-        // /////END TEST
-        //
-        // var adjQuantumState = math.multiply(adjScalar, newQuantumState);
-        // console.log("adjQuantumState: " + adjQuantumState);
-        //
-
         var probAmp0 = math.subset(newQuantumState, math.index(0, 0));
         var probAmp1 = math.subset(newQuantumState, math.index(1, 0));
 
+        this.setProbAmplitudes(probAmp0, probAmp1);
+    }
+
+    resetGlobalPhase() {
+        var probAmp0 = math.complex(Math.cos(this.getInclinationRadians() / 2), 0);
+        var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
+        var probAmp1 = math.multiply(
+            math.complex(Math.cos(this.getAzimuthRadians()),
+                         Math.sin(this.getAzimuthRadians())),
+            sinHalfIncl);
         this.setProbAmplitudes(probAmp0, probAmp1);
     }
 
