@@ -15,21 +15,21 @@
   limitations under the License.
 
   TODO:
-    - Add gate buttons and functionality
-    - Use min version of babylon.js
-    - Document classes
+    [] Add gate buttons and functionality
+    [] Use min version of babylon.js
+    [] Document classes
+    [] Fix meta element so image will load into GitBook links
 -->
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <meta property="twitter:image" content="https://javafxpert.github.io/grok-bloch/images/bloch-sphere.png">
+    <!--meta property="twitter:image" content="https://javafxpert.github.io/grok-bloch/images/bloch-sphere.png"-->
     <title>v0.092 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
     <script src="js/thirdparty/babylon.gui.min.js"></script>
     <script src="js/thirdparty/math.min.js"></script>
-    <!--script src="js/thirdparty/mathjax.js"></script-->
     <script src="js/blochsphere.js"></script>
     <script src="js/gate.js"></script>
     <style>
@@ -239,9 +239,25 @@
             /////// END Gates panel
 
 
+            /////// Top panel (State in Dirac notation)
+            var qubitStateDiracPanel = new BABYLON.GUI.StackPanel();
+            qubitStateDiracPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            qubitStateDiracPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            advancedTexture.addControl(qubitStateDiracPanel);
+
+            var qubitStateDiracTextBlock = new BABYLON.GUI.TextBlock();
+            qubitStateDiracTextBlock.text = "Dirac notation will go here";
+            qubitStateDiracTextBlock.color = "black";
+            qubitStateDiracTextBlock.fontSize = fontSize;
+
+            qubitStateDiracPanel.width = "300px";
+            qubitStateDiracPanel.height = "80px";
+
+            qubitStateDiracPanel.addControl(qubitStateDiracTextBlock);
+            /////// END Top panel
 
 
-
+            /////// Bottom panel
             var UiPanel = new BABYLON.GUI.StackPanel();
             UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
@@ -275,7 +291,11 @@
             quantumStateGrid.addControl(basisLabel1, 1, 1);
 
             UiPanel.addControl(quantumStateGrid);
+            /////// END Bottom panel
 
+
+
+            /////// Control panel
             // Define selection panel and groups
             var inclination = function(radians) {
                 blochSphere.setInclinationRadians(radians);
@@ -306,18 +326,11 @@
             selectBox.height = 0.25;
             selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
             selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-            // selectBox.fontFamily = "times new roman";
-            // selectBox.fontSize = "36pt";
-
-            // selectBox.color = "blue";
-            // selectBox.background = "#FFFF99";
-            // selectBox.barColor = "#4F7DF2";
-            // selectBox.headerColor = "blue";
-            // selectBox.buttonColor = "orange";
-            // selectBox.buttonBackground = "#684502";
-            // selectBox.labelColor = "brown";
 
             advancedTexture.addControl(selectBox);
+            /////// END Control panel
+
+
             scene.onPointerObservable.add((pointerInfo) => {
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
