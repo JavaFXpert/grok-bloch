@@ -57,11 +57,14 @@
 
         var blochSphere = null;
 
+        var quantumStateDiracGrid = new BABYLON.GUI.Grid();
+
         var quantumStateGrid = new BABYLON.GUI.Grid();
         var probAmplitudeTextBlock0 = new BABYLON.GUI.TextBlock();
         var probAmplitudeTextBlock1 = new BABYLON.GUI.TextBlock();
         var probabilityTextBlock0 = new BABYLON.GUI.TextBlock();
         var probabilityTextBlock1 = new BABYLON.GUI.TextBlock();
+        var azimuthRadiansTextBlock = new BABYLON.GUI.TextBlock();
 
         // get the canvas DOM element
         var canvas = document.getElementById('renderCanvas');
@@ -240,6 +243,8 @@
 
 
             /////// Top panel (State in Dirac notation)
+            // \vert \psi \rangle = \sqrt{ 0.80} \vert 0 \rangle + (\sqrt{0.20}) e^{i 0.25\pi} \vert 1 \rangle
+            // \vert \psi \rangle = \sqrt{ 0.80} \vert 0 \rangle + (\sqrt{0.20}) e^{i 0.25\pi} \vert 1 \rangle
             var qubitStateDiracPanel = new BABYLON.GUI.StackPanel();
             qubitStateDiracPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             qubitStateDiracPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
@@ -250,10 +255,16 @@
             qubitStateDiracTextBlock.color = "black";
             qubitStateDiracTextBlock.fontSize = fontSize;
 
-            qubitStateDiracPanel.width = "300px";
-            qubitStateDiracPanel.height = "80px";
+            // qubitStateDiracPanel.width = "728px";
+            // qubitStateDiracPanel.height = "163px";
+            // qubitStateDiracPanel.
+            //
+            var qubitStateDiracImage = new BABYLON.GUI.Image("but", "images/qubit-state-dirac.png");
+            qubitStateDiracImage.width = "546px";
+            qubitStateDiracImage.height = "48px";
+            // advancedTexture.addControl(qubitStateDiracImage);
 
-            qubitStateDiracPanel.addControl(qubitStateDiracTextBlock);
+            qubitStateDiracPanel.addControl(qubitStateDiracImage);
             /////// END Top panel
 
 
@@ -273,6 +284,23 @@
             basisLabel1.text = "|1>";
             basisLabel1.color = "black";
             basisLabel1.fontSize = fontSize;
+
+
+            //// Dirac notation grid
+            quantumStateDiracGrid.width = "546px";
+            quantumStateDiracGrid.height = "48px";
+
+            quantumStateDiracGrid.addRowDefinition(1.00);
+            quantumStateDiracGrid.addColumnDefinition(118, true);
+            quantumStateDiracGrid.addColumnDefinition(79, true);
+            quantumStateDiracGrid.addColumnDefinition(125, true);
+            quantumStateDiracGrid.addColumnDefinition(66, true);
+            quantumStateDiracGrid.addColumnDefinition(54, true);
+            quantumStateDiracGrid.addColumnDefinition(68, true);
+
+            qubitStateDiracPanel.addControl(quantumStateDiracGrid);
+            //// END Dirac notation grid
+
 
             // Grid
             //var grid = new BABYLON.GUI.Grid();
@@ -385,10 +413,22 @@
             probabilityTextBlock1.color = "black";
             probabilityTextBlock1.fontSize = fontSize;
 
+            azimuthRadiansTextBlock.dispose();
+            azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2);
+            azimuthRadiansTextBlock.color = "black";
+            azimuthRadiansTextBlock.fontSize = fontSize;
+
             quantumStateGrid.addControl(probAmplitudeTextBlock0, 0, 0);
             quantumStateGrid.addControl(probAmplitudeTextBlock1, 1, 0);
-            quantumStateGrid.addControl(probabilityTextBlock0, 0, 2);
-            quantumStateGrid.addControl(probabilityTextBlock1, 1, 2);
+            //quantumStateGrid.addControl(probabilityTextBlock0, 0, 2);
+            //quantumStateGrid.addControl(probabilityTextBlock1, 1, 2);
+
+
+            ////// Update Dirac notation
+            quantumStateDiracGrid.addControl(probabilityTextBlock0, 0, 1)
+            quantumStateDiracGrid.addControl(probabilityTextBlock1, 0, 3)
+            quantumStateDiracGrid.addControl(azimuthRadiansTextBlock, 0, 5)
+            ////// END Update Dirac notation
         }
 
         // call the createScene function
