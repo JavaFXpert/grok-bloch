@@ -248,6 +248,7 @@
             var qubitStateDiracPanel = new BABYLON.GUI.StackPanel();
             qubitStateDiracPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             qubitStateDiracPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+            qubitStateDiracPanel.height = "500px";
             advancedTexture.addControl(qubitStateDiracPanel);
 
             var qubitStateDiracTextBlock = new BABYLON.GUI.TextBlock();
@@ -304,7 +305,7 @@
 
             // Grid
             //var grid = new BABYLON.GUI.Grid();
-            quantumStateGrid.background = "white";
+            // quantumStateGrid.background = "white";
             // quantumStateGrid.adaptWidthToChildren = true;
             quantumStateGrid.width = "300px";
             quantumStateGrid.height = "80px";
@@ -315,8 +316,8 @@
             quantumStateGrid.addRowDefinition(0.50);
             quantumStateGrid.addRowDefinition(0.50);
 
-            quantumStateGrid.addControl(basisLabel0, 0, 1);
-            quantumStateGrid.addControl(basisLabel1, 1, 1);
+            // quantumStateGrid.addControl(basisLabel0, 0, 1);
+            // quantumStateGrid.addControl(basisLabel1, 1, 1);
 
             UiPanel.addControl(quantumStateGrid);
             /////// END Bottom panel
@@ -414,7 +415,7 @@
             probabilityTextBlock1.fontSize = fontSize;
 
             azimuthRadiansTextBlock.dispose();
-            azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2);
+            azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2) + "π";
             azimuthRadiansTextBlock.color = "black";
             azimuthRadiansTextBlock.fontSize = fontSize;
 
