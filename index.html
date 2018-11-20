@@ -67,6 +67,8 @@
         var probabilityTextBlock1 = new BABYLON.GUI.TextBlock();
         var azimuthRadiansTextBlock = new BABYLON.GUI.TextBlock();
 
+        var outcomeProbabilityBar = new BABYLON.GUI.Slider();
+
         // get the canvas DOM element
         var canvas = document.getElementById('renderCanvas');
 
@@ -95,7 +97,21 @@
             // Buttons, panels
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+            /////// Outcome probability bar
+            outcomeProbabilityBar.minimum = 0;
+            outcomeProbabilityBar.maximum = 1;
+            outcomeProbabilityBar.isThumbClamped = true;
+            outcomeProbabilityBar.isVertical = true;
+            outcomeProbabilityBar.displayThumb = false;
+            outcomeProbabilityBar.width = "30px";
+            outcomeProbabilityBar.height = "250px";
+            outcomeProbabilityBar.background = "white";
+            outcomeProbabilityBar.color = "lightblue";
+            outcomeProbabilityBar.value = 0.75;
 
+            advancedTexture.addControl(outcomeProbabilityBar);
+            outcomeProbabilityBar.linkWithMesh(blochSphere);
+            outcomeProbabilityBar.linkOffsetX = -300
 
 
             /////// Gates panel
@@ -400,6 +416,8 @@
             var imaginary0 = blochSphere.getProbAmplitude0().im;
             var imaginary1 = blochSphere.getProbAmplitude1().im;
 
+            // Update outcome probability bar
+            outcomeProbabilityBar.value = blochSphere.getProbability0();
 
             probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().re.toFixed(2); // +
                 // (imaginary0 < 0 ? " - " : " + ") +
