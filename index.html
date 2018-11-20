@@ -19,6 +19,7 @@
     [] Use min version of babylon.js
     [] Document classes
     [] Fix meta element so image will load into GitBook links
+    [] Improve formatting of Pi rotations by justifying text instead of using spaces
 -->
 <html>
 <head>
@@ -427,7 +428,7 @@
             //azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2) + "π";
             azimuthRadiansTextBlock.text = azimuthRadiansToPiRadians(blochSphere.getAzimuthRadians());
             azimuthRadiansTextBlock.color = "black";
-            azimuthRadiansTextBlock.fontSize = fontSize * 0.75;
+            azimuthRadiansTextBlock.fontSize = fontSize * 0.80;
             azimuthRadiansTextBlock.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 
             quantumStateGrid.addControl(probAmplitudeTextBlock0, 0, 0);
@@ -449,9 +450,6 @@
             if (piRadiansStr === "0.00π" || piRadiansStr === "2.00π") {
                 piRadiansStr = "0      ";
             }
-            else if (piRadiansStr === "1.00π") {
-                piRadiansStr = "π      ";
-            }
             else if (piRadiansStr === "0.13π") {
                 piRadiansStr = "π/8    ";
             }
@@ -468,10 +466,46 @@
                 piRadiansStr = "π/2    ";
             }
             else if (piRadiansStr === "0.67π") {
-                piRadiansStr = "2π/3   ";
+                piRadiansStr = "2π/3 ";
             }
             else if (piRadiansStr === "0.75π") {
-                piRadiansStr = "3π/4   ";
+                piRadiansStr = "3π/4 ";
+            }
+            else if (piRadiansStr === "0.83π") {
+                piRadiansStr = "5π/6 ";
+            }
+            else if (piRadiansStr === "0.88π") {
+                piRadiansStr = "7π/8 ";
+            }
+            else if (piRadiansStr === "1.00π") {
+                piRadiansStr = "π      ";
+            }
+            else if (piRadiansStr === "1.13π") {
+                piRadiansStr = "9π/8 ";
+            }
+            else if (piRadiansStr === "1.17π") {
+                piRadiansStr = "7π/6 ";
+            }
+            else if (piRadiansStr === "1.25π") {
+                piRadiansStr = "5π/4 ";
+            }
+            else if (piRadiansStr === "1.33π") {
+                piRadiansStr = "4π/3 ";
+            }
+            else if (piRadiansStr === "1.50π") {
+                piRadiansStr = "3π/2 ";
+            }
+            else if (piRadiansStr === "1.67π") {
+                piRadiansStr = "5π/3 ";
+            }
+            else if (piRadiansStr === "1.75π") {
+                piRadiansStr = "7π/4 ";
+            }
+            else if (piRadiansStr === "1.83π") {
+                piRadiansStr = "11π/6";
+            }
+            else if (piRadiansStr === "1.88π") {
+                piRadiansStr = "15π/8";
             }
             return piRadiansStr;
         }
