@@ -97,21 +97,48 @@
             // Buttons, panels
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-            /////// Outcome probability bar
+            /////// Outcome probability panel, bar, and labels
+            var outcomeProbabilityPanel = new BABYLON.GUI.StackPanel();
+            //outcomeProbabilityPanel.adaptHeightToChildren = true;
+            outcomeProbabilityPanel.height = "410px";
+
+            const outcomeProbabilityHeadingTextBlock = new BABYLON.GUI.TextBlock();
+            outcomeProbabilityHeadingTextBlock.text = "Outcome probability";
+            outcomeProbabilityHeadingTextBlock.color = "black";
+            outcomeProbabilityHeadingTextBlock.fontSize = fontSize * 0.75;
+            outcomeProbabilityHeadingTextBlock.height = "30px";
+            outcomeProbabilityPanel.addControl(outcomeProbabilityHeadingTextBlock);
+
+            const outcomeProbabilityTextBlock1 = new BABYLON.GUI.TextBlock();
+            outcomeProbabilityTextBlock1.text = "1";
+            outcomeProbabilityTextBlock1.color = "black";
+            outcomeProbabilityTextBlock1.fontSize = fontSize;
+            outcomeProbabilityTextBlock1.height = "30px";
+            outcomeProbabilityPanel.addControl(outcomeProbabilityTextBlock1);
+
             outcomeProbabilityBar.minimum = 0;
             outcomeProbabilityBar.maximum = 1;
             outcomeProbabilityBar.isThumbClamped = true;
             outcomeProbabilityBar.isVertical = true;
             outcomeProbabilityBar.displayThumb = false;
             outcomeProbabilityBar.width = "30px";
-            outcomeProbabilityBar.height = "250px";
-            outcomeProbabilityBar.background = "white";
-            outcomeProbabilityBar.color = "lightblue";
-            outcomeProbabilityBar.value = 0.75;
+            outcomeProbabilityBar.height = "290px";
+            outcomeProbabilityBar.background = "#CCCCCC";
+            outcomeProbabilityBar.color = "#666666";
+            outcomeProbabilityBar.value = 0;
+            outcomeProbabilityPanel.addControl(outcomeProbabilityBar);
 
-            advancedTexture.addControl(outcomeProbabilityBar);
-            outcomeProbabilityBar.linkWithMesh(blochSphere);
-            outcomeProbabilityBar.linkOffsetX = -300
+            const outcomeProbabilityTextBlock0 = new BABYLON.GUI.TextBlock();
+            outcomeProbabilityTextBlock0.text = "0";
+            outcomeProbabilityTextBlock0.color = "black";
+            outcomeProbabilityTextBlock0.fontSize = fontSize;
+            outcomeProbabilityTextBlock0.height = "30px";
+            outcomeProbabilityPanel.addControl(outcomeProbabilityTextBlock0);
+
+
+            advancedTexture.addControl(outcomeProbabilityPanel);
+            outcomeProbabilityPanel.linkWithMesh(blochSphere);
+            outcomeProbabilityPanel.linkOffsetX = -230
 
 
             /////// Gates panel
