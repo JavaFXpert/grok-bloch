@@ -55,8 +55,11 @@
     window.addEventListener('DOMContentLoaded', function(){
 
         const fontSize = 28;
+        const groundPosition = -1.7;
 
         var blochSphere = null;
+        var quantumPhaseCylinder = null;
+        var quantumPhaseLine = null;
 
         var quantumStateDiracGrid = new BABYLON.GUI.Grid();
 
@@ -68,6 +71,8 @@
         var azimuthRadiansTextBlock = new BABYLON.GUI.TextBlock();
 
         var outcomeProbabilityBar = new BABYLON.GUI.Slider();
+
+
 
         // get the canvas DOM element
         var canvas = document.getElementById('renderCanvas');
@@ -93,13 +98,32 @@
             // Add lights to the scene
             var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
 
+            var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 3, height: 3}, scene);
+            ground.position.y = groundPosition;
+
+
+            /////// Quantum phase panel, ellipse, line, and label
+            // Colors per surface
+            const cylColors = [
+                new BABYLON.Color4(0.75, 0.75, 0.75, 1),		// bottom cap
+                new BABYLON.Color4(0, 0, 0, 1),				// tube
+                new BABYLON.Color4(0.75, 0.75, 0.75, 1)		// top cap
+            ];
+
+            quantumPhaseCylinder =
+                BABYLON.MeshBuilder.CreateCylinder("phaseCyl",
+                    {height: 0.01, diameter: 2,
+                        faceColors: cylColors}, scene);
+            /////// END Quantum phase panel, ellipse, line, and label
+
+            quantumPhaseCylinder.position.y = groundPosition;
+
 
             // Buttons, panels
             var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
             /////// Outcome probability panel, bar, and labels
             var outcomeProbabilityPanel = new BABYLON.GUI.StackPanel();
-            //outcomeProbabilityPanel.adaptHeightToChildren = true;
             outcomeProbabilityPanel.height = "410px";
 
             const outcomeProbabilityHeadingTextBlock = new BABYLON.GUI.TextBlock();
@@ -135,10 +159,46 @@
             outcomeProbabilityTextBlock0.height = "30px";
             outcomeProbabilityPanel.addControl(outcomeProbabilityTextBlock0);
 
-
             advancedTexture.addControl(outcomeProbabilityPanel);
             outcomeProbabilityPanel.linkWithMesh(blochSphere);
-            outcomeProbabilityPanel.linkOffsetX = -230
+            outcomeProbabilityPanel.linkOffsetX = -280
+            /////// END Outcome probability panel, bar, and labels
+
+
+
+            // var quantumPhasePanel = new BABYLON.GUI.StackPanel();
+            // quantumPhasePanel.height = "140px";
+            //
+            // const quantumPhaseHeadingTextBlock = new BABYLON.GUI.TextBlock();
+            // quantumPhaseHeadingTextBlock.text = "Quantum phase";
+            // quantumPhaseHeadingTextBlock.color = "black";
+            // quantumPhaseHeadingTextBlock.fontSize = fontSize * 0.75;
+            // quantumPhaseHeadingTextBlock.height = "30px";
+            // quantumPhasePanel.addControl(quantumPhaseHeadingTextBlock);
+            //
+            // const quantumPhaseEllipse = new BABYLON.GUI.Ellipse();
+            // quantumPhaseEllipse.width = "110px"
+            // quantumPhaseEllipse.height = "110px";
+            // //quantumPhaseEllipse.scaleX = 2.73;
+            // quantumPhaseEllipse.color = "#000000";
+            // quantumPhaseEllipse.thickness = 1;
+            // quantumPhaseEllipse.background = "#CCCCCC";
+            // //quantumPhasePanel.addControl(quantumPhaseEllipse);
+            //
+            // const quantumPhaseLine = new BABYLON.GUI.Line();
+            // quantumPhaseLine.color = "blue";
+            // quantumPhaseLine.x1 = 0;
+            // quantumPhaseLine.y1 = 0;
+            // quantumPhaseLine.x2 = 550;
+            // quantumPhaseLine.y2 = 550;
+            // quantumPhaseLine.width = 20;
+            // quantumPhasePanel.addControl(quantumPhaseLine);
+            //
+            //
+            // advancedTexture.addControl(quantumPhasePanel);
+            // quantumPhasePanel.linkWithMesh(blochSphere);
+            // quantumPhasePanel.linkOffsetY = 280;
+
 
 
             /////// Gates panel
@@ -325,7 +385,8 @@
             var UiPanel = new BABYLON.GUI.StackPanel();
             UiPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             UiPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-            advancedTexture.addControl(UiPanel);
+            // TODO: Make this info appear in a different form (e.g. a vector)
+            // advancedTexture.addControl(UiPanel);
 
             // Grid labels
             var basisLabel0 = new BABYLON.GUI.TextBlock();
@@ -487,6 +548,27 @@
             quantumStateDiracGrid.addControl(probabilityTextBlock1, 1, 3)
             quantumStateDiracGrid.addControl(azimuthRadiansTextBlock, 0, 5)
             ////// END Update Dirac notation
+
+
+            ////// Update Quantum Phase display
+            let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
+
+            //Array of points to construct Bloch X axis line
+            quantumPhasePoints = [
+                quantumPhaseCylinder.position,
+                //new BABYLON.Vector3(0, 0, 2)
+                quantumPhaseCartesianCoords
+            ];
+
+            if (quantumPhaseLine) quantumPhaseLine.dispose();
+            quantumPhaseLine =
+                BABYLON.MeshBuilder.CreateLines("quantumPhasePoints",
+                    {points: quantumPhasePoints}, this.scene);
+            quantumPhaseLine.color = new BABYLON.Color3(0, 0, 0);
+            quantumPhaseLine.width = 5;
+
+
+            ////// END Update Quantum Phase display
         }
 
         function azimuthRadiansToPiRadians(radians) {
@@ -554,6 +636,15 @@
             }
             return piRadiansStr;
         }
+
+        function getQuantumPhaseCartesianCoords() {
+            let axisX = Math.sin(blochSphere.getAzimuthRadians());
+            let axisY = groundPosition + .01;
+            let axisZ = -Math.cos(blochSphere.getAzimuthRadians());
+
+            return new BABYLON.Vector3(axisX, axisY, axisZ);
+        }
+
 
         // call the createScene function
         var scene = createScene();
