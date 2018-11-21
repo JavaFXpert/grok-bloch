@@ -452,8 +452,8 @@
                 switch (pointerInfo.type) {
                     case BABYLON.PointerEventTypes.POINTERDOWN:
                         // TODO: Find out how to identify that sphere was picked
-                        //if(pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == sphere) {
-                        if(pointerInfo.pickInfo.hit) {
+                        if(pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == blochSphere.sphere) {
+                        //if(pointerInfo.pickInfo.hit) {
                             console.log("pickedPoint: " + pointerInfo.pickInfo.pickedPoint);
 
                             blochSphere.setCartesianCoords(pointerInfo.pickInfo.pickedPoint);
