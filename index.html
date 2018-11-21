@@ -102,7 +102,7 @@
             // Add lights to the scene
             var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
 
-            var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 3, height: 3}, scene);
+            var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 2.5, height: 2.5}, scene);
             ground.position.y = groundPositionVertical;
 
 
@@ -230,23 +230,27 @@
             });
             leftPanel.addControl(hGateBtn);
 
-            var u1GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u1-gate.png");
-            u1GateBtn.paddingTop = paddingTop;
-            u1GateBtn.width = buttonSize;
-            u1GateBtn.height = buttonSize;
-            u1GateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+            const rxPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rx-pi8-gate.png");
+            rxPi8GateBtn.paddingTop = paddingTop;
+            rxPi8GateBtn.width = buttonSize;
+            rxPi8GateBtn.height = buttonSize;
+            rxPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RxPi8);
+                blochSphere.applyGate(Gate.RxPi8);
+                updateQuantumStateDisplay();
             });
-            leftPanel.addControl(u1GateBtn);
+            leftPanel.addControl(rxPi8GateBtn);
 
-            var u3GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u3-gate.png");
-            u3GateBtn.paddingTop = paddingTop;
-            u3GateBtn.width = buttonSize;
-            u3GateBtn.height = buttonSize;
-            u3GateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+            const rzPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rz-pi8-gate.png");
+            rzPi8GateBtn.paddingTop = paddingTop;
+            rzPi8GateBtn.width = buttonSize;
+            rzPi8GateBtn.height = buttonSize;
+            rzPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RzPi8);
+                blochSphere.applyGate(Gate.RzPi8);
+                updateQuantumStateDisplay();
             });
-            leftPanel.addControl(u3GateBtn);
+            leftPanel.addControl(rzPi8GateBtn);
 
             var sGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-gate.png");
             sGateBtn.paddingTop = paddingTop;
@@ -292,14 +296,16 @@
             });
             rightPanel.addControl(tDagGateBtn);
 
-            var u2GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/u2-gate.png");
-            u2GateBtn.paddingTop = paddingTop;
-            u2GateBtn.width = buttonSize;
-            u2GateBtn.height = buttonSize;
-            u2GateBtn.onPointerDownObservable.add(()=> {
-                //if (idleRange) scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
+            const ryPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-pi8-gate.png");
+            ryPi8GateBtn.paddingTop = paddingTop;
+            ryPi8GateBtn.width = buttonSize;
+            ryPi8GateBtn.height = buttonSize;
+            ryPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RyPi8);
+                blochSphere.applyGate(Gate.RyPi8);
+                updateQuantumStateDisplay();
             });
-            rightPanel.addControl(u2GateBtn);
+            rightPanel.addControl(ryPi8GateBtn);
 
             var zeroStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/zero-state.png");
             zeroStateBtn.paddingTop = paddingTop;

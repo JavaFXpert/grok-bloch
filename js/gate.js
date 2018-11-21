@@ -52,4 +52,15 @@ Gate.Tt = new Gate(math.matrix([
     [1, 0],
     [0, math.complex(1 / math.sqrt(2), -1 / math.sqrt(2))]]));
 
+Gate.RxPi8 = new Gate(math.matrix([
+    [math.cos(math.pi / 16), math.multiply(math.complex(0, -1), math.sin(math.pi / 16))],
+    [math.multiply(math.complex(0, -1), math.sin(math.pi / 16)), math.cos(math.pi / 16)]]));
+
+Gate.RyPi8 = new Gate(math.matrix([
+    [math.cos(math.pi / 16), -math.sin(math.pi / 16)],
+    [math.sin(math.pi / 16), math.cos(math.pi / 16)]]));
+
+Gate.RzPi8 = new Gate(math.matrix([
+    [math.exp(math.multiply(math.complex(0, -1), math.pi / 16)), 0],
+    [0, math.exp(math.multiply(math.complex(0, 1), math.pi / 16))]]));
 

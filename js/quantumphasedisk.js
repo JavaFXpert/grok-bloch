@@ -53,26 +53,26 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
         this.phaseCyl.material = myMaterial;
         //this.position.y = this.verticalPositionInScene;
-        this.phaseCyl.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
+        this.phaseCyl.scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
 
         myMaterial.alpha = 1.0;
 
 
         // Axis labels
-        const zeroLabel = this.makeTextPlane("0", "black", 0.5);
-        zeroLabel.position = new BABYLON.Vector3(0.15, 0.01, -1.2);
+        const zeroLabel = this.makeTextPlane("0", "black", 0.6);
+        zeroLabel.position = new BABYLON.Vector3(0.18, 0.01, -1.33);
         zeroLabel.isPickable = false;
 
-        const piLabel = this.makeTextPlane("π", "black", 0.5);
-        piLabel.position = new BABYLON.Vector3(0.15, 0.01, 1.2);
+        const piLabel = this.makeTextPlane("π", "black", 0.6);
+        piLabel.position = new BABYLON.Vector3(0.15, 0.01, 1.1);
         piLabel.isPickable = false;
 
-        const piOver2Label = this.makeTextPlane("π/2", "black", 0.5);
-        piOver2Label.position = new BABYLON.Vector3(1.25, 0.01, 0.0);
+        const piOver2Label = this.makeTextPlane("π/2", "black", 0.6);
+        piOver2Label.position = new BABYLON.Vector3(1.3, 0.01, -0.1);
         piOver2Label.isPickable = false;
 
-        const pi3Over2Label = this.makeTextPlane("3π/2", "black", 0.5);
-        pi3Over2Label.position = new BABYLON.Vector3(-1.2, 0.01, 0.0);
+        const pi3Over2Label = this.makeTextPlane("3π/2", "black", 0.6);
+        pi3Over2Label.position = new BABYLON.Vector3(-1.35, 0.01, -0.1);
         pi3Over2Label.isPickable = false;
 
 
@@ -80,9 +80,9 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
     }
 
     makeTextPlane(text, color, size) {
-        var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 50, this.scene, true);
+        var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 70, this.scene, true);
         dynamicTexture.hasAlpha = true;
-        dynamicTexture.drawText(text, 5, 30, "bold 16px Arial", color, "transparent", true);
+        dynamicTexture.drawText(text, 5, 30, "bold 30px Arial", color, "transparent", true);
         var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, this.scene, true);
         plane.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
         plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", this.scene);
