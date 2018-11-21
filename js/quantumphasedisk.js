@@ -41,7 +41,8 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
 
     getQuantumPhaseCartesianCoords() {
         let xPos = Math.sin(this.blochSphere.getAzimuthRadians());
-        let yPos = this.verticalPositionInScene + 0.01;
+        //let yPos = this.verticalPositionInScene + 0.01;
+        let yPos = 0.01;
         let zPos = -Math.cos(this.blochSphere.getAzimuthRadians());
 
         return new BABYLON.Vector3(xPos, yPos, zPos);
@@ -51,15 +52,29 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
     setupDisk() {
         var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
         this.phaseCyl.material = myMaterial;
-        this.position.y = this.verticalPositionInScene;
+        //this.position.y = this.verticalPositionInScene;
         this.phaseCyl.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
 
         myMaterial.alpha = 1.0;
 
+
         // Axis labels
-        var zeroChar = this.makeTextPlane("0", "black", 0.2);
-        zeroChar.position = new BABYLON.Vector3(0, 0.1, -1.2);
-        zeroChar.isPickable = false;
+        const zeroLabel = this.makeTextPlane("0", "black", 0.5);
+        zeroLabel.position = new BABYLON.Vector3(0.15, 0.01, -1.2);
+        zeroLabel.isPickable = false;
+
+        const piLabel = this.makeTextPlane("π", "black", 0.5);
+        piLabel.position = new BABYLON.Vector3(0.15, 0.01, 1.2);
+        piLabel.isPickable = false;
+
+        const piOver2Label = this.makeTextPlane("π/2", "black", 0.5);
+        piOver2Label.position = new BABYLON.Vector3(1.25, 0.01, 0.0);
+        piOver2Label.isPickable = false;
+
+        const pi3Over2Label = this.makeTextPlane("3π/2", "black", 0.5);
+        pi3Over2Label.position = new BABYLON.Vector3(-1.2, 0.01, 0.0);
+        pi3Over2Label.isPickable = false;
+
 
         this.updateQuantumPhaseLine()
     }
@@ -67,12 +82,14 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
     makeTextPlane(text, color, size) {
         var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 50, this.scene, true);
         dynamicTexture.hasAlpha = true;
-        dynamicTexture.drawText(text, 5, 40, "bold 36px Arial", color, "transparent", true);
+        dynamicTexture.drawText(text, 5, 30, "bold 16px Arial", color, "transparent", true);
         var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, this.scene, true);
+        plane.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
         plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", this.scene);
         plane.material.backFaceCulling = false;
         plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
         plane.material.diffuseTexture = dynamicTexture;
+        plane.parent = this.phaseCyl;
         return plane;
     }
 
@@ -84,20 +101,23 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
 
         //Array of points to construct Bloch X axis line
         const quantumPhasePoints = [
-            this.phaseCyl.position,
+            //this.phaseCyl.position,
+            new BABYLON.Vector3(0, 0.01, 0),
             quantumPhaseCartesianCoords
         ];
 
         this.quantumPhaseLine =
             BABYLON.MeshBuilder.CreateLines("quantumPhasePoints",
                 {points: quantumPhasePoints}, this.scene);
+        this.quantumPhaseLine.parent = this.phaseCyl;
 
         this.quantumPhaseLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumPhaseLineCap", {height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, this.scene);
+        this.quantumPhaseLineCap.parent = this.phaseCyl;
 
         this.quantumPhaseLine.color = this.quantumPhaseLineColor;
         this.quantumPhaseLineCap.color = this.quantumPhaseLineColor;
         this.quantumPhaseLineCap.position = this.getQuantumPhaseCartesianCoords();
-        this.quantumPhaseLineCap.rotation = new BABYLON.Vector3(0, -this.blochSphere.getAzimuthRadians(), 0);
+        this.quantumPhaseLineCap.rotation = new BABYLON.Vector3(-Math.PI / 2, -this.blochSphere.getAzimuthRadians(), 0);
     }
 
 }
