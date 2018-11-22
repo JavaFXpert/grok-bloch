@@ -109,6 +109,11 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
     getAzimuthRadians() {
+        // If quantum state is [0> there is no phase
+        if (this.inclinationRadians < 0.000001) {
+            this.azimuthRadians = 0;
+        }
+
         return this.azimuthRadians % (Math.PI * 2);
     }
 

@@ -15,12 +15,15 @@
   limitations under the License.
 
   TODO:
-    [] Add gate buttons and functionality
+    [] Verify whether phase calculations are always correct when state is |1>
+    [] Provide parameterized rotation gates.
+    [] Follow up on Jay's suggestion regarding y button: |+i> and |-i>
     [] Use min version of babylon.js
     [] Document classes
     [] Fix meta element so image will load into GitBook links
     [] Improve formatting of Pi rotations by justifying text instead of using spaces
     [] Consider providing capability of sliding "outcome probability" bar to manipulate Bloch sphere state
+    [] Consider labeling the Ry gates |+i> and |-i>
 -->
 <html>
 <head>
@@ -130,7 +133,7 @@
             outcomeProbabilityPanel.height = "410px";
 
             const outcomeProbabilityHeadingTextBlock = new BABYLON.GUI.TextBlock();
-            outcomeProbabilityHeadingTextBlock.text = "Outcome probability";
+            outcomeProbabilityHeadingTextBlock.text = "Prob of |0>";
             outcomeProbabilityHeadingTextBlock.color = "black";
             outcomeProbabilityHeadingTextBlock.fontSize = fontSize * 0.75;
             outcomeProbabilityHeadingTextBlock.height = "30px";
@@ -240,6 +243,17 @@
             });
             leftPanel.addControl(rxPi8GateBtn);
 
+            const ryPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-pi8-gate.png");
+            ryPi8GateBtn.paddingTop = paddingTop;
+            ryPi8GateBtn.width = buttonSize;
+            ryPi8GateBtn.height = buttonSize;
+            ryPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RyPi8);
+                blochSphere.applyGate(Gate.RyPi8);
+                updateQuantumStateDisplay();
+            });
+            leftPanel.addControl(ryPi8GateBtn);
+
             const rzPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rz-pi8-gate.png");
             rzPi8GateBtn.paddingTop = paddingTop;
             rzPi8GateBtn.width = buttonSize;
@@ -250,6 +264,16 @@
                 updateQuantumStateDisplay();
             });
             leftPanel.addControl(rzPi8GateBtn);
+
+            var zeroStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/zero-state.png");
+            zeroStateBtn.paddingTop = paddingTop;
+            zeroStateBtn.width = buttonSize;
+            zeroStateBtn.height = buttonSize;
+            zeroStateBtn.onPointerDownObservable.add(()=> {
+                blochSphere.setProbAmplitudes(math.complex(1, 0), math.complex(0, 0));
+                updateQuantumStateDisplay();
+            });
+            leftPanel.addControl(zeroStateBtn);
 
             var sGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-gate.png");
             sGateBtn.paddingTop = paddingTop;
@@ -295,26 +319,48 @@
             });
             rightPanel.addControl(tDagGateBtn);
 
-            const ryPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-pi8-gate.png");
-            ryPi8GateBtn.paddingTop = paddingTop;
-            ryPi8GateBtn.width = buttonSize;
-            ryPi8GateBtn.height = buttonSize;
-            ryPi8GateBtn.onPointerDownObservable.add(()=> {
-                console.log(Gate.RyPi8);
-                blochSphere.applyGate(Gate.RyPi8);
+            const rxmPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rx-mpi8-gate.png");
+            rxmPi8GateBtn.paddingTop = paddingTop;
+            rxmPi8GateBtn.width = buttonSize;
+            rxmPi8GateBtn.height = buttonSize;
+            rxmPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RxmPi8);
+                blochSphere.applyGate(Gate.RxmPi8);
                 updateQuantumStateDisplay();
             });
-            rightPanel.addControl(ryPi8GateBtn);
+            rightPanel.addControl(rxmPi8GateBtn);
 
-            var zeroStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/zero-state.png");
-            zeroStateBtn.paddingTop = paddingTop;
-            zeroStateBtn.width = buttonSize;
-            zeroStateBtn.height = buttonSize;
-            zeroStateBtn.onPointerDownObservable.add(()=> {
-                blochSphere.setProbAmplitudes(math.complex(1, 0), math.complex(0, 0));
+            const rymPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-mpi8-gate.png");
+            rymPi8GateBtn.paddingTop = paddingTop;
+            rymPi8GateBtn.width = buttonSize;
+            rymPi8GateBtn.height = buttonSize;
+            rymPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RymPi8);
+                blochSphere.applyGate(Gate.RymPi8);
                 updateQuantumStateDisplay();
             });
-            rightPanel.addControl(zeroStateBtn);
+            rightPanel.addControl(rymPi8GateBtn);
+
+            const rzmPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rz-mpi8-gate.png");
+            rzmPi8GateBtn.paddingTop = paddingTop;
+            rzmPi8GateBtn.width = buttonSize;
+            rzmPi8GateBtn.height = buttonSize;
+            rzmPi8GateBtn.onPointerDownObservable.add(()=> {
+                console.log(Gate.RzmPi8);
+                blochSphere.applyGate(Gate.RzmPi8);
+                updateQuantumStateDisplay();
+            });
+            rightPanel.addControl(rzmPi8GateBtn);
+
+            var oneStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/one-state.png");
+            oneStateBtn.paddingTop = paddingTop;
+            oneStateBtn.width = buttonSize;
+            oneStateBtn.height = buttonSize;
+            oneStateBtn.onPointerDownObservable.add(()=> {
+                blochSphere.setProbAmplitudes(math.complex(0, 0), math.complex(1, 0));
+                updateQuantumStateDisplay();
+            });
+            rightPanel.addControl(oneStateBtn);
 
             /////// END Gates panel
 
