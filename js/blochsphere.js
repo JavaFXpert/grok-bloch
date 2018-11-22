@@ -37,7 +37,13 @@ class BlochSphere extends BABYLON.Mesh {
         var babylonAxisZ = babylonAxesVector.z;
 
         this.setInclinationRadians(Math.acos(babylonAxisY));
-        this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2));
+
+        if (babylonAxisZ <= 0) {
+            this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2));
+        }
+        else {
+            this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI) % (Math.PI * 2));
+        }
     }
 
     getCartesianCoords() {
@@ -263,7 +269,10 @@ class BlochSphere extends BABYLON.Mesh {
         this.quantumStateLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumStateLineCap", {height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, this.scene);
 
         this.quantumStateLine.color = this.quantumStateLineColor;
+        this.quantumStateLine.isPickable = false;
+
         this.quantumStateLineCap.color = this.quantumStateLineColor;
+        this.quantumStateLineCap.isPickable = false;
         this.quantumStateLineCap.position = this.getCartesianCoords();
         this.quantumStateLineCap.rotation = new BABYLON.Vector3(-this.getInclinationRadians(), -this.getAzimuthRadians(), 0);
     }
