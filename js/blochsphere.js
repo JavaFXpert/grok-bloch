@@ -166,9 +166,12 @@ class BlochSphere extends BABYLON.Mesh {
         ];
 
         //Create lines
-        var xAxisLine = BABYLON.MeshBuilder.CreateLines("xAxisLine", {points: xAxisPoints}, this.scene);
-        var yAxisLine = BABYLON.MeshBuilder.CreateLines("yAxisLine", {points: yAxisPoints}, this.scene);
-        var zAxisLine = BABYLON.MeshBuilder.CreateLines("zAxisLine", {points: zAxisPoints}, this.scene);
+        var xAxisLine = BABYLON.MeshBuilder.CreateDashedLines("xAxisLine",
+            {points: xAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
+        var yAxisLine = BABYLON.MeshBuilder.CreateDashedLines("yAxisLine",
+            {points: yAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
+        var zAxisLine = BABYLON.MeshBuilder.CreateDashedLines("zAxisLine",
+            {points: zAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
 
         xAxisLine.color = this.lineColor;
         yAxisLine.color = this.lineColor;

@@ -55,8 +55,38 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         //this.position.y = this.verticalPositionInScene;
         this.phaseCyl.scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
 
+        const circumferenceLine = this.createCircumferenceLine();
+        circumferenceLine.parent = this.phaseCyl;
+        circumferenceLine.color = this.lineColor;
+
         myMaterial.alpha = 1.0;
 
+        // Array of points to construct that corresponds to Bloch X axis line
+        const xAxisPoints = [
+            new BABYLON.Vector3(0, 0.01, -1.0),
+            new BABYLON.Vector3(0, 0.01, 1.0)
+        ];
+
+        // Array of points to construct that corresponds to Bloch Y axis line
+        const yAxisPoints = [
+            new BABYLON.Vector3(-1.0, 0.01, 0),
+            new BABYLON.Vector3(1.0, 0.01, 0)
+        ];
+
+        //Create axis lines
+        const xAxisLine = BABYLON.MeshBuilder.CreateDashedLines("xAxisLine",
+            {points: xAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
+        const yAxisLine = BABYLON.MeshBuilder.CreateDashedLines("yAxisLine",
+            {points: yAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
+
+        xAxisLine.color = this.lineColor;
+        yAxisLine.color = this.lineColor;
+
+        xAxisLine.isPickable = false;
+        yAxisLine.isPickable = false;
+
+        xAxisLine.parent = this.phaseCyl;
+        yAxisLine.parent = this.phaseCyl;
 
         // Axis labels
         const zeroLabel = this.makeTextPlane("0", "black", 0.6);
@@ -77,6 +107,23 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
 
 
         this.updateQuantumPhaseLine()
+    }
+
+    createCircumferenceLine() {
+        var myPoints = [];
+        var radius = 1 - 0.02;
+        var deltaTheta = Math.PI / 20;
+        var theta = 0;
+        var Y = 0.01;
+        for (var i = 0; i<Math.PI * 20; i++) {
+            myPoints.push(new BABYLON.Vector3(radius * Math.cos(theta), Y, radius * Math.sin(theta)));
+            theta += deltaTheta;
+        }
+
+        //Create lines
+        var lines = BABYLON.MeshBuilder.CreateDashedLines("lines", {points: myPoints, updatable: true}, this.scene);
+        lines.isPickable = false;
+        return lines;
     }
 
     makeTextPlane(text, color, size) {
