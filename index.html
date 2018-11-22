@@ -30,7 +30,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
     <!--meta property="twitter:image" content="https://javafxpert.github.io/grok-bloch/images/bloch-sphere.png"-->
-    <title>v0.11 Grokking the Bloch Sphere</title>
+    <title>v0.12 Grokking the Bloch Sphere</title>
     <!--- Link to the last version of BabylonJS --->
     <!-- script src="https://cdn.babylonjs.com/babylon.js"></script -->
     <script src="js/thirdparty/babylon.js"></script>
@@ -107,6 +107,7 @@
 
             var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 2.5, height: 2.5}, scene);
             ground.position.y = groundPositionVertical;
+            ground.isPickable = false;
 
 
             /////// Quantum phase panel, ellipse, line, and label
