@@ -62,6 +62,7 @@
 
         const fontSize = 28;
 
+        let ground = null;
         const groundPositionVertical = -1.8;
 
         var blochSphere = null;
@@ -105,7 +106,7 @@
             // Add lights to the scene
             var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
 
-            var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 2.5, height: 2.5}, scene);
+            ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 2.5, height: 2.5}, scene);
             ground.position.y = groundPositionVertical;
             ground.isPickable = false;
 
@@ -458,6 +459,111 @@
             /////// END Bottom panel
 
 
+            /////// User may paste one or more state vectors for display on the Bloch sphere
+            const strToComplexNum = function(complexStr) {
+                // Delineation between real and imaginary parts is first sign (+/-) that isn't at the start of the string
+                let minusSignPosition = complexStr.indexOf('-', 1);
+                if (complexStr.charAt(minusSignPosition - 1) ==='e') {
+                    minusSignPosition = complexStr.indexOf('-', minusSignPosition + 1);
+                }
+                let plusSignPosition = complexStr.indexOf('+', 1);
+                if (complexStr.charAt(plusSignPosition - 1) === 'e') {
+                    plusSignPosition = complexStr.indexOf('+', plusSignPosition + 1);
+                }
+                let imaginaryPositive = true;
+                if (minusSignPosition > 0) {
+                    if (plusSignPosition < 0 || minusSignPosition < plusSignPosition) {
+                        imaginaryPositive = false;
+                    }
+                }
+
+                let realPartStr = "";
+                let imagPartStr = "";
+
+                if (imaginaryPositive) {
+                    // There should be a plus sign in the string
+                    realPartStr = complexStr.substring(0, plusSignPosition);
+                    imagPartStr = complexStr.substring(plusSignPosition);
+                }
+                else {
+                    // There should be a minus sign in the string
+                    realPartStr = complexStr.substring(0, minusSignPosition);
+                    imagPartStr = complexStr.substring(minusSignPosition);
+                }
+                if (imagPartStr.endsWith('j')) {
+                    imagPartStr = imagPartStr.substring(0, imagPartStr.indexOf('j'));
+                }
+                else if (imagPartStr.endsWith('i')) {
+                    imagPartStr = imagPartStr.substring(0, imagPartStr.indexOf('i'));
+                }
+                return math.complex(Number(realPartStr), Number(imagPartStr));
+            };
+
+            const statevectorInputText = new BABYLON.GUI.InputText();
+            statevectorInputText.width = 0.25;
+            statevectorInputText.maxWidth = 0.25;
+            statevectorInputText.height = "40px";
+            statevectorInputText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+            statevectorInputText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+            statevectorInputText.text = "";
+            statevectorInputText.color = "white";
+            statevectorInputText.background = "gray";
+            statevectorInputText.paddingBottom = "8px";
+            statevectorInputText.paddingLeft = "8px";
+
+            statevectorInputText.onTextPasteObservable.add(function(){
+                let txt = statevectorInputText.text;
+                statevectorInputText.text = "** Pasted **";
+                setTimeout(() => { statevectorInputText.text = ""}, 1500);
+
+                let tempStateStrArray = [];
+                let pos = 0;
+
+                // Remove everything up to and including the final '[' (but there should only be one)
+                pos = txt.lastIndexOf('[');
+                if (pos >= 0 && txt.length > pos + 1) {
+                    txt = txt.substring(pos + 1);
+                }
+
+                // Remove everything including and after the first ']' (but there should only be one)
+                pos = txt.indexOf(']');
+                if (pos >= 0) {
+                    txt = txt.substring(0, pos);
+                }
+
+                // Remove all spaces
+                txt = txt.replace(/\s/g, '');
+
+                // Populate tempStateStrArray
+                tempStateStrArray = txt.split(',');
+
+                blochSphere.setAllowMultipleStateLines(false);
+                for (let idx = 0; idx < tempStateStrArray.length; idx++) {
+
+                    // Send each pair of complex numbers the bloch sphere,
+                    // suppressing the disposal of the previous one
+                    if (idx >= 3) {
+                        blochSphere.setAllowMultipleStateLines(true);
+                    }
+                    else {
+                        blochSphere.setAllowMultipleStateLines(false);
+                    }
+
+                    if (idx % 2 == 1) {
+                        blochSphere.setProbAmplitudes(
+                            strToComplexNum(tempStateStrArray[idx - 1]),
+                            strToComplexNum(tempStateStrArray[idx])
+                        );
+                        updateQuantumStateDisplay();
+                    }
+                }
+                blochSphere.setAllowMultipleStateLines(false);
+
+            });
+
+
+            advancedTexture.addControl(statevectorInputText);
+
 
             /////// Control panel
             // Define selection panel and groups
@@ -491,7 +597,8 @@
             selectBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
             selectBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
-            advancedTexture.addControl(selectBox);
+            // TODO: Uncomment next line if sliders desired
+            // advancedTexture.addControl(selectBox);
             /////// END Control panel
 
 
@@ -516,7 +623,7 @@
 
             // return the created scene
             return scene;
-        }
+        };
 
         function updateQuantumStateDisplay() {
             blochSphere.resetGlobalPhase();
@@ -529,8 +636,8 @@
             outcomeProbabilityBar.value = blochSphere.getProbability0();
 
             probAmplitudeTextBlock0.text = blochSphere.getProbAmplitude0().re.toFixed(2); // +
-                // (imaginary0 < 0 ? " - " : " + ") +
-                // Math.abs(imaginary0).toFixed(2) + "i";
+            // (imaginary0 < 0 ? " - " : " + ") +
+            // Math.abs(imaginary0).toFixed(2) + "i";
             probAmplitudeTextBlock0.color = "black";
             probAmplitudeTextBlock0.fontSize = fontSize;
 
@@ -572,7 +679,14 @@
 
 
             ////// Update Quantum Phase display
+            if (blochSphere.allowMultipleStateLines) {
+                ground.visibility = 0;
+            }
+            else {
+                ground.visibility = 1;
+            }
             quantumPhaseDisk.updateQuantumPhaseLine();
+
             // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
             //
             // //Array of points to construct Bloch X axis line

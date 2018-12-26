@@ -28,6 +28,8 @@ class BlochSphere extends BABYLON.Mesh {
         this.quantumStateLineCap = null;
         this.quantumStateLineColor = new BABYLON.Color3(0, 0, 1);
 
+        this.allowMultipleStateLines = false;
+
         this.setupSphere();
     }
 
@@ -121,6 +123,10 @@ class BlochSphere extends BABYLON.Mesh {
         }
 
         return this.azimuthRadians % (Math.PI * 2);
+    }
+
+    setAllowMultipleStateLines(allowMultipleStateLines) {
+        this.allowMultipleStateLines = allowMultipleStateLines;
     }
 
     applyGate(gate) {
@@ -254,8 +260,10 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
     updateQuantumStateLine() {
-        if (this.quantumStateLine) this.quantumStateLine.dispose();
-        if (this.quantumStateLineCap) this.quantumStateLineCap.dispose();
+        if (!this.allowMultipleStateLines) {
+            if (this.quantumStateLine) this.quantumStateLine.dispose();
+            if (this.quantumStateLineCap) this.quantumStateLineCap.dispose();
+        }
 
         var qubitStateCartesianCoords = this.getCartesianCoords();
 
