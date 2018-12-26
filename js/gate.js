@@ -76,3 +76,28 @@ Gate.RzmPi8 = new Gate(math.matrix([
     [math.exp(math.multiply(math.complex(0, -1), -math.pi / 16)), 0],
     [0, math.exp(math.multiply(math.complex(0, 1), -math.pi / 16))]]));
 
+// Pi / 12 gates
+Gate.RxPi12 = new Gate(math.matrix([
+    [math.cos(math.pi / 24), math.multiply(math.complex(0, -1), math.sin(math.pi / 24))],
+    [math.multiply(math.complex(0, -1), math.sin(math.pi / 24)), math.cos(math.pi / 24)]]));
+
+Gate.RyPi12 = new Gate(math.matrix([
+    [math.cos(math.pi / 24), -math.sin(math.pi / 24)],
+    [math.sin(math.pi / 24), math.cos(math.pi / 24)]]));
+
+Gate.RzPi12 = new Gate(math.matrix([
+    [math.exp(math.multiply(math.complex(0, -1), math.pi / 24)), 0],
+    [0, math.exp(math.multiply(math.complex(0, 1), math.pi / 24))]]));
+
+Gate.RxmPi12 = new Gate(math.matrix([
+    [math.cos(-math.pi / 24), math.multiply(math.complex(0, -1), math.sin(-math.pi / 24))],
+    [math.multiply(math.complex(0, -1), math.sin(-math.pi / 24)), math.cos(-math.pi / 24)]]));
+
+Gate.RymPi12 = new Gate(math.matrix([
+    [math.cos(-math.pi / 24), -math.sin(-math.pi / 24)],
+    [math.sin(-math.pi / 24), math.cos(-math.pi / 24)]]));
+
+Gate.RzmPi12 = new Gate(math.matrix([
+    [math.exp(math.multiply(math.complex(0, -1), -math.pi / 24)), 0],
+    [0, math.exp(math.multiply(math.complex(0, 1), -math.pi / 24))]]));
+
