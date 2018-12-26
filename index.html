@@ -97,7 +97,9 @@
 
             BABYLON.SceneOptimizer.OptimizeAsync(scene);
 
-            scene.clearColor = new BABYLON.Color3( .75, .75, .75);
+            // scene.clearColor = new BABYLON.Color3( .75, .75, .75);
+            scene.clearColor = new BABYLON.Color3( 1.0, 1.0, 1.0);
+
 
             // Add a camera to the scene and attach it to the canvas
             var camera = new BABYLON.ArcRotateCamera("camera1",  -Math.PI / 2.5, Math.PI / 2.5, 6, new BABYLON.Vector3(0, 0, 0), scene);
