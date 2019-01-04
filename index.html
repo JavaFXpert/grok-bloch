@@ -80,7 +80,7 @@
 
         var outcomeProbabilityBar = new BABYLON.GUI.Slider();
 
-
+        let vectorPasted = false; // Indicates that vector was pasted for display
 
         // get the canvas DOM element
         var canvas = document.getElementById('renderCanvas');
@@ -539,6 +539,8 @@
                 // Populate tempStateStrArray
                 tempStateStrArray = txt.split(',');
 
+                vectorPasted = true;
+
                 blochSphere.setAllowMultipleStateLines(false);
                 for (let idx = 0; idx < tempStateStrArray.length; idx++) {
 
@@ -681,7 +683,7 @@
 
 
             ////// Update Quantum Phase display
-            if (blochSphere.allowMultipleStateLines) {
+            if (vectorPasted) {
                 ground.visibility = 0;
             }
             else {
