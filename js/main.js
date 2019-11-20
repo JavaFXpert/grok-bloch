@@ -11,7 +11,6 @@ window.addEventListener('DOMContentLoaded', function() {
     var engine = new BABYLON.Engine(canvas, true);
 
     engine.setHardwareScalingLevel(1.0 / config.devicePixelRatio);
-    console.log('----------> devicePixelRatio:', devicePixelRatio)
 
     // call the createScene function
     var scene = createScene(engine, canvas, config);

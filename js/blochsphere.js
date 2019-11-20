@@ -285,6 +285,3 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
 }
-
-
-console.log('//////////////////////')
