@@ -22,7 +22,7 @@ class BlochSphere extends BABYLON.Mesh {
         this.probAmplitude1 = math.complex(0, 0);
 
         this.scene = scene;
-        this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0}, scene);
+        this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0 }, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
         this.quantumStateLine = null;
         this.quantumStateLineCap = null;
@@ -42,8 +42,7 @@ class BlochSphere extends BABYLON.Mesh {
 
         if (babylonAxisZ <= 0) {
             this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI * 2) % (Math.PI * 2));
-        }
-        else {
+        } else {
             this.setAzimuthRadians((Math.atan(babylonAxisX / -babylonAxisZ) + Math.PI) % (Math.PI * 2));
         }
     }
@@ -130,7 +129,10 @@ class BlochSphere extends BABYLON.Mesh {
     }
 
     applyGate(gate) {
-        var currentQuantumState = math.matrix([[this.getProbAmplitude0()], [this.getProbAmplitude1()]]);
+        var currentQuantumState = math.matrix([
+            [this.getProbAmplitude0()],
+            [this.getProbAmplitude1()]
+        ]);
         console.log("currentQuantumState: " + currentQuantumState);
         var newQuantumState = math.multiply(gate.matrix, currentQuantumState);
         console.log("newQuantumState: " + newQuantumState);
@@ -146,7 +148,7 @@ class BlochSphere extends BABYLON.Mesh {
         var sinHalfIncl = Math.sin(this.getInclinationRadians() / 2);
         var probAmp1 = math.multiply(
             math.complex(Math.cos(this.getAzimuthRadians()),
-                         Math.sin(this.getAzimuthRadians())),
+                Math.sin(this.getAzimuthRadians())),
             sinHalfIncl);
         this.setProbAmplitudes(probAmp0, probAmp1);
     }
@@ -183,12 +185,9 @@ class BlochSphere extends BABYLON.Mesh {
         ];
 
         //Create lines
-        var xAxisLine = BABYLON.MeshBuilder.CreateDashedLines("xAxisLine",
-            {points: xAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
-        var yAxisLine = BABYLON.MeshBuilder.CreateDashedLines("yAxisLine",
-            {points: yAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
-        var zAxisLine = BABYLON.MeshBuilder.CreateDashedLines("zAxisLine",
-            {points: zAxisPoints, dashSize: 3, gapSize: 3}, this.scene);
+        var xAxisLine = BABYLON.MeshBuilder.CreateDashedLines("xAxisLine", { points: xAxisPoints, dashSize: 3, gapSize: 3 }, this.scene);
+        var yAxisLine = BABYLON.MeshBuilder.CreateDashedLines("yAxisLine", { points: yAxisPoints, dashSize: 3, gapSize: 3 }, this.scene);
+        var zAxisLine = BABYLON.MeshBuilder.CreateDashedLines("zAxisLine", { points: zAxisPoints, dashSize: 3, gapSize: 3 }, this.scene);
 
         xAxisLine.color = this.lineColor;
         yAxisLine.color = this.lineColor;
@@ -236,13 +235,13 @@ class BlochSphere extends BABYLON.Mesh {
         var deltaTheta = Math.PI / 20;
         var theta = 0;
         var Y = 0;
-        for (var i = 0; i<Math.PI * 20; i++) {
+        for (var i = 0; i < Math.PI * 20; i++) {
             myPoints.push(new BABYLON.Vector3(radius * Math.cos(theta), Y, radius * Math.sin(theta)));
             theta += deltaTheta;
         }
 
         //Create lines
-        var lines = BABYLON.MeshBuilder.CreateDashedLines("lines", {points: myPoints, updatable: true}, this.scene);
+        var lines = BABYLON.MeshBuilder.CreateDashedLines("lines", { points: myPoints, updatable: true }, this.scene);
         lines.isPickable = false;
         return lines;
     }
@@ -272,9 +271,9 @@ class BlochSphere extends BABYLON.Mesh {
             // new BABYLON.Vector3(0, 0, 0),
             qubitStateCartesianCoords
         ];
-        this.quantumStateLine = BABYLON.MeshBuilder.CreateLines("qStatePoints", {points: qStatePoints}, this.scene);
+        this.quantumStateLine = BABYLON.MeshBuilder.CreateLines("qStatePoints", { points: qStatePoints }, this.scene);
 
-        this.quantumStateLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumStateLineCap", {height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, this.scene);
+        this.quantumStateLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumStateLineCap", { height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, this.scene);
 
         this.quantumStateLine.color = this.quantumStateLineColor;
         this.quantumStateLine.isPickable = false;
