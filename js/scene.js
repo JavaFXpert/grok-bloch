@@ -91,7 +91,7 @@ function createScene(engine, canvas, config) {
     outcomeProbabilityPanel.height = adaptRatioStr(410);
 
     const outcomeProbabilityHeadingTextBlock = new BABYLON.GUI.TextBlock();
-    outcomeProbabilityHeadingTextBlock.text = "Prob of l0>";
+    outcomeProbabilityHeadingTextBlock.text = "Prob of |0⟩";
     outcomeProbabilityHeadingTextBlock.color = "black";
     outcomeProbabilityHeadingTextBlock.fontSize = config.fontSize;
     outcomeProbabilityHeadingTextBlock.height = adaptRatioStr(30);
@@ -367,12 +367,12 @@ function createScene(engine, canvas, config) {
 
     // Grid labels
     var basisLabel0 = new BABYLON.GUI.TextBlock();
-    basisLabel0.text = "l0>";
+    basisLabel0.text = "|0⟩";
     basisLabel0.color = "black";
     basisLabel0.fontSize = config.fontSize;
 
     var basisLabel1 = new BABYLON.GUI.TextBlock();
-    basisLabel1.text = "l1>";
+    basisLabel1.text = "|1⟩";
     basisLabel1.color = "black";
     basisLabel1.fontSize = config.fontSize;
 
