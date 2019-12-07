@@ -59,7 +59,7 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         circumferenceLine.parent = this.phaseCyl;
         circumferenceLine.color = this.lineColor;
 
-        myMaterial.alpha = 1.0;
+        myMaterial.alpha = 0.2;
 
         // Array of points to construct that corresponds to Bloch X axis line
         const xAxisPoints = [
@@ -89,20 +89,20 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         yAxisLine.parent = this.phaseCyl;
 
         // Axis labels
-        const zeroLabel = this.makeTextPlane("0", "black", 0.6);
-        zeroLabel.position = new BABYLON.Vector3(0.18, 0.01, -1.33);
+        const zeroLabel = this.makeTextPlane("0", "black", 0.4);
+        zeroLabel.position = new BABYLON.Vector3(0.1, 0.0, -1.2);
         zeroLabel.isPickable = false;
 
-        const piLabel = this.makeTextPlane("π", "black", 0.6);
-        piLabel.position = new BABYLON.Vector3(0.15, 0.01, 1.1);
+        const piLabel = this.makeTextPlane("π", "black", 0.4);
+        piLabel.position = new BABYLON.Vector3(0.1, 0.0, 1.2);
         piLabel.isPickable = false;
 
-        const piOver2Label = this.makeTextPlane("π/2", "black", 0.6);
-        piOver2Label.position = new BABYLON.Vector3(1.3, 0.01, -0.1);
+        const piOver2Label = this.makeTextPlane("π/2", "black", 0.4);
+        piOver2Label.position = new BABYLON.Vector3(1.2, 0.0,0);
         piOver2Label.isPickable = false;
-
-        const pi3Over2Label = this.makeTextPlane("3π/2", "black", 0.6);
-        pi3Over2Label.position = new BABYLON.Vector3(-1.35, 0.01, -0.1);
+        
+        const pi3Over2Label = this.makeTextPlane("3π/2", "black", 0.4);
+        pi3Over2Label.position = new BABYLON.Vector3(-1.25, 0.0, 0);
         pi3Over2Label.isPickable = false;
 
 
@@ -131,12 +131,13 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         dynamicTexture.hasAlpha = true;
         dynamicTexture.drawText(text, 5, 30, "bold 30px Arial", color, "transparent", true);
         var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, this.scene, true);
-        plane.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
+        // plane.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
         plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", this.scene);
         plane.material.backFaceCulling = false;
         plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
         plane.material.diffuseTexture = dynamicTexture;
         plane.parent = this.phaseCyl;
+        plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
         return plane;
     }
 
