@@ -54,6 +54,8 @@ function createScene(engine, canvas, config) {
 
     // Add a camera to the scene and attach it to the canvas
     var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI / 2.5, Math.PI / 2.5, 6, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.lowerRadiusLimit = 5;
+    camera.upperRadiusLimit = 5;
     camera.attachControl(canvas, true);
 
     // Add lights to the scene
