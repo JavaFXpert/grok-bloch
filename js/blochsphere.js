@@ -22,11 +22,13 @@ class BlochSphere extends BABYLON.Mesh {
         this.probAmplitude1 = math.complex(0, 0);
 
         this.scene = scene;
+        // scene.ambientColor = new BABYLON.Color3(1, 1, 1);
         this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0 }, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
         this.quantumStateLine = null;
         this.quantumStateLineCap = null;
         this.quantumStateLineColor = new BABYLON.Color3(0, 0, 1);
+     
 
         this.allowMultipleStateLines = false;
 
@@ -156,6 +158,9 @@ class BlochSphere extends BABYLON.Mesh {
     /// Methods to construct the 3D Bloch sphere
     setupSphere() {
         var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
+        myMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0.0);
+        myMaterial.alpha = 0.4;
+        
         this.sphere.material = myMaterial;
         this.position.y = 0.0;
         this.sphere.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
@@ -164,7 +169,7 @@ class BlochSphere extends BABYLON.Mesh {
         equator.parent = this.sphere;
         equator.color = this.lineColor;
 
-        myMaterial.alpha = 0.4;
+        
 
         //Array of points to construct Bloch X axis line
         var xAxisPoints = [

@@ -59,14 +59,14 @@ function createScene(engine, canvas, config) {
     camera.attachControl(canvas, true);
 
     // Add lights to the scene
-    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
+    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(3, 7, -3), scene);
 
-    ground = BABYLON.MeshBuilder.CreateGround("ground", {
-        width: 2.5,
-        height: 2.5
-    }, scene);
-    ground.position.y = groundPositionVertical;
-    ground.isPickable = false;
+    // ground = BABYLON.MeshBuilder.CreateGround("ground", {
+    //     width: 5,
+    //     height: 5
+    // }, scene);
+    // ground.position.y = groundPositionVertical;
+    // ground.isPickable = false;
 
     /////// Quantum phase panel, ellipse, line, and label
     // Colors per surface
@@ -685,11 +685,11 @@ function updateQuantumStateDisplay(config) {
 
 
     ////// Update Quantum Phase display
-    if (vectorPasted) {
-        ground.visibility = 0;
-    } else {
-        ground.visibility = 1;
-    }
+    // if (vectorPasted) {
+    //     ground.visibility = 0;
+    // } else {
+    //     ground.visibility = 1;
+    // }
     quantumPhaseDisk.updateQuantumPhaseLine();
 
     // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
