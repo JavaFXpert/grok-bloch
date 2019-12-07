@@ -205,35 +205,27 @@ class BlochSphere extends BABYLON.Mesh {
         var xChar = this.makeTextPlane("X", "black", 0.2);
         xChar.position = new BABYLON.Vector3(0, 0.1, -1.2);
         xChar.isPickable = false;
-        xChar.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-
 
         var yChar = this.makeTextPlane("Y", "black", 0.2);
         yChar.position = new BABYLON.Vector3(1.2, 0, 0);
         yChar.isPickable = false;
-        yChar.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
         var zeroKet = this.makeTextPlane("|0⟩", "black", 0.2);
         zeroKet.position = new BABYLON.Vector3(0, 1.2, 0);
         zeroKet.isPickable = false;
-        zeroKet.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
         var oneKet = this.makeTextPlane("|1⟩", "black", 0.2);
         oneKet.position = new BABYLON.Vector3(0, -1.2, 0);
         oneKet.isPickable = false;
-        oneKet.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
 
         var plusKet = this.makeTextPlane("|+⟩", "black", 0.2);
         plusKet.position = new BABYLON.Vector3(0, -0.1, -1.2);
         plusKet.isPickable = false;
-        plusKet.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
         
-
         var minusKet = this.makeTextPlane("|-⟩", "black", 0.2);
         minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
         minusKet.isPickable = false;
-        minusKet.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-
+        
         this.updateQuantumStateLine()
     }
 
@@ -253,7 +245,7 @@ class BlochSphere extends BABYLON.Mesh {
         lines.isPickable = false;
         return lines;
     }
-
+    // TODO: extract it to a 3delements.js
     makeTextPlane(text, color, size) {
         var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 60, this.scene, true);
         dynamicTexture.hasAlpha = true;
@@ -263,6 +255,7 @@ class BlochSphere extends BABYLON.Mesh {
         plane.material.backFaceCulling = false;
         plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
         plane.material.diffuseTexture = dynamicTexture;
+        plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
         return plane;
     }
 
