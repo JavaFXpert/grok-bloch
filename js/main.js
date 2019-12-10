@@ -1,3 +1,5 @@
+var test;
+
 window.addEventListener('DOMContentLoaded', function() {
 
     var canvas = document.getElementById('renderCanvas');
@@ -18,10 +20,15 @@ window.addEventListener('DOMContentLoaded', function() {
     // run the render loop
     engine.runRenderLoop(function() {
         scene.render();
+        
     });
 
     // the canvas/window resize event handler
     window.addEventListener('resize', function() {
         engine.resize();
     });
+
+    test = scene;
+
 });
+

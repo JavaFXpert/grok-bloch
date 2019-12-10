@@ -22,11 +22,13 @@ class BlochSphere extends BABYLON.Mesh {
         this.probAmplitude1 = math.complex(0, 0);
 
         this.scene = scene;
+        // scene.ambientColor = new BABYLON.Color3(1, 1, 1);
         this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0 }, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
         this.quantumStateLine = null;
         this.quantumStateLineCap = null;
         this.quantumStateLineColor = new BABYLON.Color3(0, 0, 1);
+     
 
         this.allowMultipleStateLines = false;
 
@@ -156,6 +158,9 @@ class BlochSphere extends BABYLON.Mesh {
     /// Methods to construct the 3D Bloch sphere
     setupSphere() {
         var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
+        myMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0.0);
+        myMaterial.alpha = 0.4;
+        
         this.sphere.material = myMaterial;
         this.position.y = 0.0;
         this.sphere.scaling = new BABYLON.Vector3(1.0, 1.0, 1.0);
@@ -164,7 +169,7 @@ class BlochSphere extends BABYLON.Mesh {
         equator.parent = this.sphere;
         equator.color = this.lineColor;
 
-        myMaterial.alpha = 0.4;
+        
 
         //Array of points to construct Bloch X axis line
         var xAxisPoints = [
@@ -210,22 +215,22 @@ class BlochSphere extends BABYLON.Mesh {
         yChar.position = new BABYLON.Vector3(1.2, 0, 0);
         yChar.isPickable = false;
 
-        var zeroKet = this.makeTextPlane("l0>", "black", 0.2);
+        var zeroKet = this.makeTextPlane("|0⟩", "black", 0.2);
         zeroKet.position = new BABYLON.Vector3(0, 1.2, 0);
         zeroKet.isPickable = false;
 
-        var oneKet = this.makeTextPlane("l1>", "black", 0.2);
+        var oneKet = this.makeTextPlane("|1⟩", "black", 0.2);
         oneKet.position = new BABYLON.Vector3(0, -1.2, 0);
         oneKet.isPickable = false;
 
-        var plusKet = this.makeTextPlane("l+>", "black", 0.2);
+        var plusKet = this.makeTextPlane("|+⟩", "black", 0.2);
         plusKet.position = new BABYLON.Vector3(0, -0.1, -1.2);
         plusKet.isPickable = false;
-
-        var minusKet = this.makeTextPlane("<-l", "black", 0.2);
+        
+        var minusKet = this.makeTextPlane("|-⟩", "black", 0.2);
         minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
         minusKet.isPickable = false;
-
+        
         this.updateQuantumStateLine()
     }
 
@@ -245,16 +250,17 @@ class BlochSphere extends BABYLON.Mesh {
         lines.isPickable = false;
         return lines;
     }
-
+    // TODO: extract it to a 3delements.js
     makeTextPlane(text, color, size) {
         var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 60, this.scene, true);
         dynamicTexture.hasAlpha = true;
         dynamicTexture.drawText(text, 5, 40, "bold 36px Arial", color, "transparent", true);
-        var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, this.scene, true);
+        var plane = new BABYLON.Mesh.CreatePlane(text, size, this.scene, true);
         plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", this.scene);
         plane.material.backFaceCulling = false;
         plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
         plane.material.diffuseTexture = dynamicTexture;
+        plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
         return plane;
     }
 

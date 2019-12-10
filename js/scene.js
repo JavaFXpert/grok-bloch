@@ -54,17 +54,19 @@ function createScene(engine, canvas, config) {
 
     // Add a camera to the scene and attach it to the canvas
     var camera = new BABYLON.ArcRotateCamera("camera1", -Math.PI / 2.5, Math.PI / 2.5, 6, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.lowerRadiusLimit = 5;
+    camera.upperRadiusLimit = 5;
     camera.attachControl(canvas, true);
 
     // Add lights to the scene
-    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(-3, 7, 1), scene);
+    var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(3, 7, -3), scene);
 
-    ground = BABYLON.MeshBuilder.CreateGround("ground", {
-        width: 2.5,
-        height: 2.5
-    }, scene);
-    ground.position.y = groundPositionVertical;
-    ground.isPickable = false;
+    // ground = BABYLON.MeshBuilder.CreateGround("ground", {
+    //     width: 5,
+    //     height: 5
+    // }, scene);
+    // ground.position.y = groundPositionVertical;
+    // ground.isPickable = false;
 
     /////// Quantum phase panel, ellipse, line, and label
     // Colors per surface
@@ -91,7 +93,7 @@ function createScene(engine, canvas, config) {
     outcomeProbabilityPanel.height = adaptRatioStr(410);
 
     const outcomeProbabilityHeadingTextBlock = new BABYLON.GUI.TextBlock();
-    outcomeProbabilityHeadingTextBlock.text = "Prob of l0>";
+    outcomeProbabilityHeadingTextBlock.text = "Prob of |0⟩";
     outcomeProbabilityHeadingTextBlock.color = "black";
     outcomeProbabilityHeadingTextBlock.fontSize = config.fontSize;
     outcomeProbabilityHeadingTextBlock.height = adaptRatioStr(30);
@@ -367,12 +369,12 @@ function createScene(engine, canvas, config) {
 
     // Grid labels
     var basisLabel0 = new BABYLON.GUI.TextBlock();
-    basisLabel0.text = "l0>";
+    basisLabel0.text = "|0⟩";
     basisLabel0.color = "black";
     basisLabel0.fontSize = config.fontSize;
 
     var basisLabel1 = new BABYLON.GUI.TextBlock();
-    basisLabel1.text = "l1>";
+    basisLabel1.text = "|1⟩";
     basisLabel1.color = "black";
     basisLabel1.fontSize = config.fontSize;
 
@@ -683,11 +685,11 @@ function updateQuantumStateDisplay(config) {
 
 
     ////// Update Quantum Phase display
-    if (vectorPasted) {
-        ground.visibility = 0;
-    } else {
-        ground.visibility = 1;
-    }
+    // if (vectorPasted) {
+    //     ground.visibility = 0;
+    // } else {
+    //     ground.visibility = 1;
+    // }
     quantumPhaseDisk.updateQuantumPhaseLine();
 
     // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
