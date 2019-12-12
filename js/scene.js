@@ -690,7 +690,7 @@ function updateQuantumStateDisplay(config) {
     // } else {
     //     ground.visibility = 1;
     // }
-    quantumPhaseDisk.updateQuantumPhaseLine();
+    quantumPhaseDisk.updateQuantumPhaseArrow();
 
     // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
     //
