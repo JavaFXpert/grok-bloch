@@ -24,11 +24,9 @@ class BlochSphere extends BABYLON.Mesh {
         this.scene = scene;
         this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0 }, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
-        this.quantumStateLine = null;
-        this.quantumStateLineCap = null;
-        this.quantumStateLineColor = new BABYLON.Color3(0, 0, 1);
-        
-        this.arrow = null;
+
+        this.quantumStateArrow = null;
+        this.quantumStateArrowColor = new BABYLON.Color3(0, 0, 1);
 
         this.allowMultipleStateLines = false;
 
@@ -229,7 +227,7 @@ class BlochSphere extends BABYLON.Mesh {
         minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
         minusKet.isPickable = false;
         
-        this.arrow = this.createQuantumStateArrow(); 
+        this.quantumStateArrow = this.createQuantumStateArrow(); 
 
         this.updateQuantumStateArrow();
     }
@@ -242,7 +240,7 @@ class BlochSphere extends BABYLON.Mesh {
         arrowMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0);
         
         var arrowPointMaterial = new BABYLON.StandardMaterial("arrowPointMaterial", this.scene);
-        arrowPointMaterial.diffuseColor = this.quantumStateLineColor;
+        arrowPointMaterial.diffuseColor = this.quantumStateArrowColor;
         arrowPointMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0);
 
         var arrow = BABYLON.MeshBuilder.CreateLines("qStatePoints", { points: [this.sphere.position] }, this.scene);
@@ -267,6 +265,7 @@ class BlochSphere extends BABYLON.Mesh {
         quantumStateLineCap.isPickable = false;
 
         quantumStateLineCap.parent = arrow;
+
         return arrow
     }
     
@@ -307,7 +306,7 @@ class BlochSphere extends BABYLON.Mesh {
         //     if (this.quantumStateLineCap) this.quantumStateLineCap.dispose();
         // }
 
-        this.arrow.rotation = new BABYLON.Vector3(-this.getInclinationRadians(), -this.getAzimuthRadians(), 0);
+        this.quantumStateArrow.rotation = new BABYLON.Vector3(-this.getInclinationRadians(), -this.getAzimuthRadians(), 0);
 
     }
 
