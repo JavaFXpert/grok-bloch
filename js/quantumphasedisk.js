@@ -127,7 +127,7 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
     makeTextPlane(text, color, size) {
         var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 70, this.scene, true);
         dynamicTexture.hasAlpha = true;
-        dynamicTexture.drawText(text, 5, 30, "bold 30px Arial", color, "transparent", true);
+        dynamicTexture.drawText(text, 5, 30, "bold 25px Arial", color, "transparent", true);
         var plane = new BABYLON.Mesh.CreatePlane("TextPlane", size, this.scene, true);
         // plane.rotation = new BABYLON.Vector3(Math.PI / 2, 0, 0);
         plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", this.scene);
