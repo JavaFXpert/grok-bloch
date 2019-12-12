@@ -22,7 +22,6 @@ class BlochSphere extends BABYLON.Mesh {
         this.probAmplitude1 = math.complex(0, 0);
 
         this.scene = scene;
-        // scene.ambientColor = new BABYLON.Color3(1, 1, 1);
         this.sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameterX: 2.0, diameterY: 2.0, diameterZ: 2.0 }, scene);
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
         this.quantumStateLine = null;
@@ -105,7 +104,7 @@ class BlochSphere extends BABYLON.Mesh {
     setInclinationRadians(inclinationRadians) {
         this.inclinationRadians = inclinationRadians;
         console.log("this.inclinationRadians: " + this.inclinationRadians);
-        this.updateQuantumStateLine();
+        this.updateQuantumStateArrow();
     }
 
     getInclinationRadians() {
@@ -115,7 +114,7 @@ class BlochSphere extends BABYLON.Mesh {
     setAzimuthRadians(azimuthRadians) {
         this.azimuthRadians = (azimuthRadians + Math.PI * 2) % (Math.PI * 2);
         console.log("this.azimuthRadians: " + this.azimuthRadians);
-        this.updateQuantumStateLine();
+        this.updateQuantumStateArrow();
     }
 
     getAzimuthRadians() {
@@ -169,8 +168,6 @@ class BlochSphere extends BABYLON.Mesh {
         var equator = this.createEquator();
         equator.parent = this.sphere;
         equator.color = this.lineColor;
-
-        
 
         //Array of points to construct Bloch X axis line
         var xAxisPoints = [
@@ -232,12 +229,12 @@ class BlochSphere extends BABYLON.Mesh {
         minusKet.position = new BABYLON.Vector3(0, 0, 1.2);
         minusKet.isPickable = false;
         
-        this.arrow = this.createArrow(); 
+        this.arrow = this.createQuantumStateArrow(); 
 
-        this.updateQuantumStateLine();
+        this.updateQuantumStateArrow();
     }
 
-    createArrow(){
+    createQuantumStateArrow(){
         var arrowInitPosition = new BABYLON.Vector3(0, 1, 0);
     
         var arrowMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
@@ -272,6 +269,7 @@ class BlochSphere extends BABYLON.Mesh {
         quantumStateLineCap.parent = arrow;
         return arrow
     }
+    
     createEquator() {
         var myPoints = [];
         var radius = 1;
@@ -302,7 +300,7 @@ class BlochSphere extends BABYLON.Mesh {
         return plane;
     }
 
-    updateQuantumStateLine() {
+    updateQuantumStateArrow() {
         // var coordinates = this.getCartesianCoords()
         // if (!this.allowMultipleStateLines) {
         //     if (this.quantumStateLine) this.quantumStateLine.dispose();
@@ -311,16 +309,6 @@ class BlochSphere extends BABYLON.Mesh {
 
         this.arrow.rotation = new BABYLON.Vector3(-this.getInclinationRadians(), -this.getAzimuthRadians(), 0);
 
-        // var qubitStateCartesianCoords = coordinates;
-
-        // var qStatePoints = [
-        //     this.sphere.position,
-        //     // new BABYLON.Vector3(0, 0, 0),
-        //     qubitStateCartesianCoords
-        // ];
-        // // this.quantumStateLine = BABYLON.MeshBuilder.CreateLines("qStatePoints", { points: qStatePoints }, this.scene);
-
-       
     }
 
 }
