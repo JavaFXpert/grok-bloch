@@ -32,9 +32,7 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
                 scene);
         this.phaseCyl.position.y = verticalPositionInScene;
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
-        this.quantumPhaseLine = null;
-        this.quantumPhaseLineCap = null;
-        this.quantumPhaseLineColor = new BABYLON.Color3(0, 0, 1);
+        this.quantumPhaseArrow = null;
 
         this.setupDisk();
     }
@@ -105,8 +103,8 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         pi3Over2Label.position = new BABYLON.Vector3(-1.25, 0.0, 0);
         pi3Over2Label.isPickable = false;
 
-
-        this.updateQuantumPhaseLine()
+        this.quantumPhaseArrow = this.createQuantumPhaseArrow()
+        this.updateQuantumPhaseArrow()
     }
 
     createCircumferenceLine() {
@@ -141,31 +139,41 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         return plane;
     }
 
-    updateQuantumPhaseLine() {
-        if (this.quantumPhaseLine) this.quantumPhaseLine.dispose();
-        if (this.quantumPhaseLineCap) this.quantumPhaseLineCap.dispose();
+    createQuantumPhaseArrow() {
 
-        let quantumPhaseCartesianCoords = this.getQuantumPhaseCartesianCoords();
+        var arrowInitPosition = new BABYLON.Vector3(0, 1, 0);
+    
+        var arrowMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
+        arrowMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.0, 0);
+        arrowMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0);
 
-        //Array of points to construct Bloch X axis line
-        const quantumPhasePoints = [
-            //this.phaseCyl.position,
-            new BABYLON.Vector3(0, 0.01, 0),
-            quantumPhaseCartesianCoords
-        ];
+        var arrow = BABYLON.MeshBuilder.CreateLines("qStatePoints", { points: [this.phaseCyl.position] }, this.scene);
+        arrow.isPickable = false;
+        arrow.position = new BABYLON.Vector3(0, this.verticalPositionInScene, 0);
 
-        this.quantumPhaseLine =
-            BABYLON.MeshBuilder.CreateLines("quantumPhasePoints",
-                {points: quantumPhasePoints}, this.scene);
-        this.quantumPhaseLine.parent = this.phaseCyl;
+        var arrowBase = BABYLON.MeshBuilder.CreateCylinder("arrowBase", { height: 0.5, diameter: 0.02 }, this.scene);
+        arrowBase.isPickable = false;
+        arrowBase.position = new BABYLON.Vector3(0, 0.25, 0);
+        arrowBase.material = arrowMaterial;
 
-        this.quantumPhaseLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumPhaseLineCap", {height: 0.1, diameterTop: 0.0, diameterBottom: 0.1, tessellation: 6, subdivisions: 1 }, this.scene);
-        this.quantumPhaseLineCap.parent = this.phaseCyl;
+        arrowBase.parent = arrow;
 
-        this.quantumPhaseLine.color = this.quantumPhaseLineColor;
-        this.quantumPhaseLineCap.color = this.quantumPhaseLineColor;
-        this.quantumPhaseLineCap.position = this.getQuantumPhaseCartesianCoords();
-        this.quantumPhaseLineCap.rotation = new BABYLON.Vector3(-Math.PI / 2, -this.blochSphere.getAzimuthRadians(), 0);
+        var quantumStateLineCap = BABYLON.MeshBuilder.CreateCylinder("quantumStateLineCap", { height: 0.1, diameterTop: 0.0, diameterBottom: 0.1,  subdivisions: 3 }, this.scene);
+        quantumStateLineCap.material = arrowMaterial;
+        quantumStateLineCap.position = new BABYLON.Vector3(0, 0.55, 0);
+        quantumStateLineCap.isPickable = false;
+
+        quantumStateLineCap.parent = arrow;
+        
+        return arrow
+    }
+
+    updateQuantumPhaseArrow() {
+        // if (this.quantumPhaseLine) this.quantumPhaseLine.dispose();
+        // if (this.quantumPhaseLineCap) this.quantumPhaseLineCap.dispose();
+
+        this.quantumPhaseArrow.rotation = new BABYLON.Vector3(-Math.PI / 2, -this.blochSphere.getAzimuthRadians(), 0);
+        
     }
 
 }
