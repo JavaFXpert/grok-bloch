@@ -31,6 +31,7 @@ function adaptRatioStr(value) {
 function createScene(engine, canvas, config) {
     // Create the scene space
     var scene = new BABYLON.Scene(engine);
+    var rxm,rxp, rym, ryp, rzm, rzp = null;
 
     blochSphere = new BlochSphere("blochSphere", scene, 0, 0);
 
@@ -152,20 +153,20 @@ function createScene(engine, canvas, config) {
     });
     leftPanel.addControl(hGateBtn);
 
-    var rxPi12GateBtn = CreateImageButton("textures/rx-pi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RxPi12);
+    var rxPi12GateBtn = CreateImageButton("textures/rx+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rxp);
         updateQuantumStateDisplay(config);
     });
     leftPanel.addControl(rxPi12GateBtn);
 
-    var ryPi12GateBtn = CreateImageButton("textures/ry-pi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RyPi12);
+    var ryPi12GateBtn = CreateImageButton("textures/ry+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(ryp);
         updateQuantumStateDisplay(config);
     });
     leftPanel.addControl(ryPi12GateBtn);
 
-    var rzPi12GateBtn = CreateImageButton("textures/rz-pi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RzPi12);
+    var rzPi12GateBtn = CreateImageButton("textures/rz+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rzp);
         updateQuantumStateDisplay(config);
     });
     leftPanel.addControl(rzPi12GateBtn);
@@ -200,24 +201,56 @@ function createScene(engine, canvas, config) {
     });
     rightPanel.addControl(tDagGateBtn);
 
-    var rxmPi12GateBtn = CreateImageButton("textures/rx-mpi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RxmPi12);
+    var rxmPi12GateBtn = CreateImageButton("textures/rx-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rxm);
         updateQuantumStateDisplay(config);
     });
     rightPanel.addControl(rxmPi12GateBtn);
 
-    var rymPi12GateBtn = CreateImageButton("textures/ry-mpi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RymPi12);
+    var rymPi12GateBtn = CreateImageButton("textures/ry-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rym);
         updateQuantumStateDisplay(config);
     });
     rightPanel.addControl(rymPi12GateBtn);
 
-    var rzmPi12GateBtn = CreateImageButton("textures/rz-mpi12-gate.png", buttonSize, paddingTop, () => {
-        blochSphere.applyGate(Gate.RzmPi12);
+    var rzmPi12GateBtn = CreateImageButton("textures/rz-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rzm);
         updateQuantumStateDisplay(config);
     });
     rightPanel.addControl(rzmPi12GateBtn);
 
+    var addRadio = function(text, selected, parent, observable) {
+        var button = new BABYLON.GUI.RadioButton();
+        button.width = "30px";
+        button.height = "30px";
+        button.color = "#777";
+        button.background = "white";     
+        button.onIsCheckedChangedObservable.add(observable); 
+        button.isChecked=selected;
+
+        var header = BABYLON.GUI.Control.AddHeader(button, text, "80px", { isHorizontal: true, controlFirst: true });
+        header.height = "100px";
+        header.color = "#777";
+        parent.addControl(header); 
+    }
+
+    addRadio("θ=π/8", true, leftPanel, () => {
+        rxp = Gate.RxPi8;
+        ryp = Gate.RyPi8;
+        rzp = Gate.RzPi8;
+        rxm = Gate.RxmPi8;
+        rym = Gate.RymPi8;
+        rzm = Gate.RzmPi8;
+    });
+
+    addRadio("θ=π/12", false, rightPanel,  () => {
+        rxp = Gate.RxPi12;
+        ryp = Gate.RyPi12;
+        rzp = Gate.RzPi12;
+        rxm = Gate.RxmPi12;
+        rym = Gate.RymPi12;
+        rzm = Gate.RzmPi12;
+    });
 
     /////// END Gates panel
 
