@@ -133,7 +133,7 @@ function createScene(engine, canvas, config) {
 
     /////// Gates panel
     var leftPanel = new BABYLON.GUI.StackPanel();
-    leftPanel.width = adaptRatioStr(250);
+    leftPanel.width = adaptRatioStr(280);
     leftPanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
     leftPanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     advancedTexture.addControl(leftPanel);
