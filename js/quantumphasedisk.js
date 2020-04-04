@@ -189,8 +189,7 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         this.quantumPhaseArrow.rotation = new BABYLON.Vector3(-Math.PI / 2, -this.blochSphere.getAzimuthRadians(), 0);
         var value = -this.blochSphere.getProbability0()
         this.phaseCylValue.scaling = new BABYLON.Vector3(value, 0.1, value); 
-        // this.phaseCylValue.scaling = new BABYLON.Vector3(1, 1, 1); 
-        console.log(">>>>",this.phaseCylValue.scaling)        
+     
     }
 
 }

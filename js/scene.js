@@ -123,6 +123,25 @@ function createScene(engine, canvas, config) {
         return Btn;
     }
 
+    var addRadio = function(text, selected, parent, observable) {
+        var button = new BABYLON.GUI.RadioButton();
+        button.width = "30px";
+        button.height = "30px";
+        button.color = "#777";
+        button.background = "white";     
+        button.onIsCheckedChangedObservable.add((state)=>{
+            if (state) {
+                observable();
+            }
+        }); 
+        button.isChecked=selected;
+
+        var header = BABYLON.GUI.Control.AddHeader(button, text, "80px", { isHorizontal: true, controlFirst: true });
+        header.height = "100px";
+        header.color = "#777";
+        parent.addControl(header); 
+    }
+
     var zeroStateBtn = CreateImageButton("textures/zero-state.png", buttonSize, paddingTop, () => {
         blochSphere.setProbAmplitudes(math.complex(1, 0), math.complex(0, 0));
         updateQuantumStateDisplay(config);
@@ -152,6 +171,15 @@ function createScene(engine, canvas, config) {
         updateQuantumStateDisplay(config);
     });
     leftPanel.addControl(hGateBtn);
+
+    addRadio("θ=π/8", true, leftPanel, () => {
+        rxp = Gate.RxPi8;
+        ryp = Gate.RyPi8;
+        rzp = Gate.RzPi8;
+        rxm = Gate.RxmPi8;
+        rym = Gate.RymPi8;
+        rzm = Gate.RzmPi8;
+    });
 
     var rxPi12GateBtn = CreateImageButton("textures/rx+gate.png", buttonSize, paddingTop, () => {
         blochSphere.applyGate(rxp);
@@ -201,6 +229,15 @@ function createScene(engine, canvas, config) {
     });
     rightPanel.addControl(tDagGateBtn);
 
+    addRadio("θ=π/12", false, rightPanel,  () => {
+        rxp = Gate.RxPi12;
+        ryp = Gate.RyPi12;
+        rzp = Gate.RzPi12;
+        rxm = Gate.RxmPi12;
+        rym = Gate.RymPi12;
+        rzm = Gate.RzmPi12;
+    });
+
     var rxmPi12GateBtn = CreateImageButton("textures/rx-gate.png", buttonSize, paddingTop, () => {
         blochSphere.applyGate(rxm);
         updateQuantumStateDisplay(config);
@@ -218,40 +255,7 @@ function createScene(engine, canvas, config) {
         updateQuantumStateDisplay(config);
     });
     rightPanel.addControl(rzmPi12GateBtn);
-
-    var addRadio = function(text, selected, parent, observable) {
-        var button = new BABYLON.GUI.RadioButton();
-        button.width = "30px";
-        button.height = "30px";
-        button.color = "#777";
-        button.background = "white";     
-        button.onIsCheckedChangedObservable.add(observable); 
-        button.isChecked=selected;
-
-        var header = BABYLON.GUI.Control.AddHeader(button, text, "80px", { isHorizontal: true, controlFirst: true });
-        header.height = "100px";
-        header.color = "#777";
-        parent.addControl(header); 
-    }
-
-    addRadio("θ=π/8", true, leftPanel, () => {
-        rxp = Gate.RxPi8;
-        ryp = Gate.RyPi8;
-        rzp = Gate.RzPi8;
-        rxm = Gate.RxmPi8;
-        rym = Gate.RymPi8;
-        rzm = Gate.RzmPi8;
-    });
-
-    addRadio("θ=π/12", false, rightPanel,  () => {
-        rxp = Gate.RxPi12;
-        ryp = Gate.RyPi12;
-        rzp = Gate.RzPi12;
-        rxm = Gate.RxmPi12;
-        rym = Gate.RymPi12;
-        rzm = Gate.RzmPi12;
-    });
-
+   
     /////// END Gates panel
 
 
@@ -282,11 +286,6 @@ function createScene(engine, canvas, config) {
     qubitStateDiracTextBlock.text = "Dirac notation will go here";
     qubitStateDiracTextBlock.color = "black";
     qubitStateDiracTextBlock.fontSize = config.fontSize;
-
-    // qubitStateDiracPanel.width = "728px";
-    // qubitStateDiracPanel.height = "163px";
-    // qubitStateDiracPanel.
-    //
     /////// END Top panel
 
 
@@ -327,9 +326,7 @@ function createScene(engine, canvas, config) {
 
 
     // Grid
-    //var grid = new BABYLON.GUI.Grid();
-    // quantumStateGrid.background = "black";
-    // quantumStateGrid.adaptWidthToChildren = true;
+ 
     quantumStateGrid.width = adaptRatioStr(300);
     quantumStateGrid.height = adaptRatioStr(80);
 
@@ -338,9 +335,6 @@ function createScene(engine, canvas, config) {
     quantumStateGrid.addColumnDefinition(0.30);
     quantumStateGrid.addRowDefinition(0.50);
     quantumStateGrid.addRowDefinition(0.50);
-
-    // quantumStateGrid.addControl(basisLabel0, 0, 1);
-    // quantumStateGrid.addControl(basisLabel1, 1, 1);
 
     UiPanel.addControl(quantumStateGrid);
     /////// END Bottom panel
@@ -595,7 +589,6 @@ function updateQuantumStateDisplay(config) {
     probabilityTextBlock1.fontSize = config.fontSize;
 
     azimuthRadiansTextBlock.dispose();
-    //azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2) + "π";
     azimuthRadiansTextBlock.text = azimuthRadiansToPiRadians(blochSphere.getAzimuthRadians());
     azimuthRadiansTextBlock.color = "black";
     azimuthRadiansTextBlock.fontSize = config.fontSize * 0.7;
@@ -603,41 +596,12 @@ function updateQuantumStateDisplay(config) {
 
     quantumStateGrid.addControl(probAmplitudeTextBlock0, 0, 0);
     quantumStateGrid.addControl(probAmplitudeTextBlock1, 1, 0);
-    //quantumStateGrid.addControl(probabilityTextBlock0, 0, 2);
-    //quantumStateGrid.addControl(probabilityTextBlock1, 1, 2);
-
 
     ////// Update Dirac notation
     quantumStateDiracGrid.addControl(probabilityTextBlock0, 1, 1)
     quantumStateDiracGrid.addControl(probabilityTextBlock1, 1, 3)
     quantumStateDiracGrid.addControl(azimuthRadiansTextBlock, 0, 5)
-        ////// END Update Dirac notation
+     ////// END Update Dirac notation
 
-
-    ////// Update Quantum Phase display
-    // if (vectorPasted) {
-    //     ground.visibility = 0;
-    // } else {
-    //     ground.visibility = 1;
-    // }
     quantumPhaseDisk.updateQuantumPhaseArrow();
-
-    // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
-    //
-    // //Array of points to construct Bloch X axis line
-    // quantumPhasePoints = [
-    //     quantumPhaseCylinder.position,
-    //     //new BABYLON.Vector3(0, 0, 2)
-    //     quantumPhaseCartesianCoords
-    // ];
-
-    // if (quantumPhaseLine) quantumPhaseLine.dispose();
-    // quantumPhaseLine =
-    //     BABYLON.MeshBuilder.CreateLines("quantumPhasePoints",
-    //         {points: quantumPhasePoints}, this.scene);
-    // quantumPhaseLine.color = new BABYLON.Color3(0, 0, 0);
-    // quantumPhaseLine.width = 5;
-
-
-    ////// END Update Quantum Phase display
 }
