@@ -31,7 +31,21 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
                     ]},
                 scene);
         this.phaseCyl.position.y = verticalPositionInScene;
+
+        this.phaseCylValue =
+            BABYLON.MeshBuilder.CreateCylinder("phaseCylValue",
+                {height: 0.001, diameter: 1.2,
+                    faceColors: [
+                        new BABYLON.Color4(0.4, 0.4, 0.4, 1),	// bottom cap
+                        new BABYLON.Color4(0, 0, 0, 1),				// tube
+                        new BABYLON.Color4(0.4, 0.4, 0.4, 1)		// top cap
+                    ]},
+                scene);
+        this.phaseCylValue.position.y = verticalPositionInScene;
+        
+
         this.lineColor = new BABYLON.Color3(.3, .3, .3);
+
         this.quantumPhaseArrow = null;
 
         this.setupDisk();
@@ -53,9 +67,9 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         //this.position.y = this.verticalPositionInScene;
         this.phaseCyl.scaling = new BABYLON.Vector3(0.6, 0.6, 0.6);
 
-        const circumferenceLine = this.createCircumferenceLine();
-        circumferenceLine.parent = this.phaseCyl;
-        circumferenceLine.color = this.lineColor;
+        const circunferenceLine = this.createcircunferenceLine();
+        circunferenceLine.parent = this.phaseCyl;
+        circunferenceLine.color = this.lineColor;
 
         myMaterial.alpha = 0.2;
 
@@ -107,7 +121,7 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         this.updateQuantumPhaseArrow()
     }
 
-    createCircumferenceLine() {
+    createcircunferenceLine() {
         var myPoints = [];
         var radius = 1 - 0.02;
         var deltaTheta = Math.PI / 20;
@@ -173,7 +187,10 @@ class QuantumPhaseDisk extends BABYLON.Mesh {
         // if (this.quantumPhaseLineCap) this.quantumPhaseLineCap.dispose();
 
         this.quantumPhaseArrow.rotation = new BABYLON.Vector3(-Math.PI / 2, -this.blochSphere.getAzimuthRadians(), 0);
-        
+        var value = -this.blochSphere.getProbability0()
+        this.phaseCylValue.scaling = new BABYLON.Vector3(value, 0.1, value); 
+        // this.phaseCylValue.scaling = new BABYLON.Vector3(1, 1, 1); 
+        console.log(">>>>",this.phaseCylValue.scaling)        
     }
 
 }
