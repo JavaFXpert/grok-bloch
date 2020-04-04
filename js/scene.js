@@ -19,19 +19,6 @@ var azimuthRadiansTextBlock = new BABYLON.GUI.TextBlock();
 
 var outcomeProbabilityBar = new BABYLON.GUI.Slider();
 
-
-// createScene function that creates and return the scene
-
-
-// function getQuantumPhaseCartesianCoords() {
-//     let axisX = Math.sin(blochSphere.getAzimuthRadians());
-//     let axisY = groundPosition + .01;
-//     let axisZ = -Math.cos(blochSphere.getAzimuthRadians());
-//
-//     return new BABYLON.Vector3(axisX, axisY, axisZ);
-// }
-
-
 function adaptRatio(value) {
     var devicePixelRatio = window.devicePixelRatio || 1.0;
     return devicePixelRatio * value;
@@ -44,6 +31,7 @@ function adaptRatioStr(value) {
 function createScene(engine, canvas, config) {
     // Create the scene space
     var scene = new BABYLON.Scene(engine);
+    var rxm,rxp, rym, ryp, rzm, rzp = null;
 
     blochSphere = new BlochSphere("blochSphere", scene, 0, 0);
 
@@ -61,29 +49,7 @@ function createScene(engine, canvas, config) {
     // Add lights to the scene
     var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(3, 7, -3), scene);
 
-    // ground = BABYLON.MeshBuilder.CreateGround("ground", {
-    //     width: 5,
-    //     height: 5
-    // }, scene);
-    // ground.position.y = groundPositionVertical;
-    // ground.isPickable = false;
-
-    /////// Quantum phase panel, ellipse, line, and label
-    // Colors per surface
-    // const cylColors = [
-    //     new BABYLON.Color4(0.75, 0.75, 0.75, 1),		// bottom cap
-    //     new BABYLON.Color4(0, 0, 0, 1),				// tube
-    //     new BABYLON.Color4(0.75, 0.75, 0.75, 1)		// top cap
-    // ];
-    //
-    // quantumPhaseCylinder =
-    //     BABYLON.MeshBuilder.CreateCylinder("phaseCyl",
-    //         {height: 0.01, diameter: 2,
-    //             faceColors: cylColors}, scene);
-    /////// END Quantum phase panel, ellipse, line, and label
-
     quantumPhaseDisk = new QuantumPhaseDisk("quantumPhaseDisk", scene, blochSphere, groundPositionVertical);
-
 
     // Buttons, panels
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -148,180 +114,148 @@ function createScene(engine, canvas, config) {
     var buttonSize = adaptRatioStr(65);
     var paddingTop = adaptRatioStr(5);
 
-    var xGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/x-gate.png");
-    xGateBtn.paddingTop = paddingTop;
-    xGateBtn.width = buttonSize;
-    xGateBtn.height = buttonSize;
-    xGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.X);
-        blochSphere.applyGate(Gate.X);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(xGateBtn);
+    function CreateImageButton(img, buttonSize, paddingTop, observable ){
+        var Btn = BABYLON.GUI.Button.CreateImageOnlyButton("but", img);
+        Btn.paddingTop = paddingTop;
+        Btn.width = buttonSize;
+        Btn.height = buttonSize;
+        Btn.onPointerDownObservable.add(observable);
+        return Btn;
+    }
 
-    var yGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/y-gate.png");
-    yGateBtn.paddingTop = paddingTop;
-    yGateBtn.width = buttonSize;
-    yGateBtn.height = buttonSize;
-    yGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.Y);
-        blochSphere.applyGate(Gate.Y);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(yGateBtn);
+    var addRadio = function(text, selected, parent, observable) {
+        var button = new BABYLON.GUI.RadioButton();
+        button.width = "30px";
+        button.height = "30px";
+        button.color = "#777";
+        button.background = "white";     
+        button.onIsCheckedChangedObservable.add((state)=>{
+            if (state) {
+                observable();
+            }
+        }); 
+        button.isChecked=selected;
 
-    var zGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/z-gate.png");
-    zGateBtn.paddingTop = paddingTop;
-    zGateBtn.width = buttonSize;
-    zGateBtn.height = buttonSize;
-    zGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.Z);
-        blochSphere.applyGate(Gate.Z);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(zGateBtn);
+        var header = BABYLON.GUI.Control.AddHeader(button, text, "80px", { isHorizontal: true, controlFirst: true });
+        header.height = "100px";
+        header.color = "#777";
+        parent.addControl(header); 
+    }
 
-    var hGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/h-gate.png");
-    hGateBtn.paddingTop = paddingTop;
-    hGateBtn.width = buttonSize;
-    hGateBtn.height = buttonSize;
-    hGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.H);
-        blochSphere.applyGate(Gate.H);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(hGateBtn);
-
-    const rxPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rx-pi12-gate.png");
-    rxPi8GateBtn.paddingTop = paddingTop;
-    rxPi8GateBtn.width = buttonSize;
-    rxPi8GateBtn.height = buttonSize;
-    rxPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RxPi8);
-        blochSphere.applyGate(Gate.RxPi12);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(rxPi8GateBtn);
-
-    const ryPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-pi12-gate.png");
-    ryPi8GateBtn.paddingTop = paddingTop;
-    ryPi8GateBtn.width = buttonSize;
-    ryPi8GateBtn.height = buttonSize;
-    ryPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RyPi8);
-        blochSphere.applyGate(Gate.RyPi12);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(ryPi8GateBtn);
-
-    const rzPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rz-pi12-gate.png");
-    rzPi8GateBtn.paddingTop = paddingTop;
-    rzPi8GateBtn.width = buttonSize;
-    rzPi8GateBtn.height = buttonSize;
-    rzPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RzPi8);
-        blochSphere.applyGate(Gate.RzPi12);
-        updateQuantumStateDisplay(config);
-    });
-    leftPanel.addControl(rzPi8GateBtn);
-
-    var zeroStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/zero-state.png");
-    zeroStateBtn.paddingTop = paddingTop;
-    zeroStateBtn.width = buttonSize;
-    zeroStateBtn.height = buttonSize;
-    zeroStateBtn.onPointerDownObservable.add(() => {
+    var zeroStateBtn = CreateImageButton("textures/zero-state.png", buttonSize, paddingTop, () => {
         blochSphere.setProbAmplitudes(math.complex(1, 0), math.complex(0, 0));
         updateQuantumStateDisplay(config);
     });
     leftPanel.addControl(zeroStateBtn);
 
-    var sGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-gate.png");
-    sGateBtn.paddingTop = paddingTop;
-    sGateBtn.width = buttonSize;
-    sGateBtn.height = buttonSize;
-    sGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.S);
-        blochSphere.applyGate(Gate.S);
+    var xGateBtn = CreateImageButton("textures/x-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.X);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(sGateBtn);
-
-    var sDagGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/s-dag-gate.png");
-    sDagGateBtn.paddingTop = paddingTop;
-    sDagGateBtn.width = buttonSize;
-    sDagGateBtn.height = buttonSize;
-    sDagGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.St);
-        blochSphere.applyGate(Gate.St);
+    leftPanel.addControl(xGateBtn);
+    
+    var yGateBtn = CreateImageButton("textures/y-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.Y);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(sDagGateBtn);
+    leftPanel.addControl(yGateBtn);
 
-    var tGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/t-gate.png");
-    tGateBtn.paddingTop = paddingTop;
-    tGateBtn.width = buttonSize;
-    tGateBtn.height = buttonSize;
-    tGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.T);
-        blochSphere.applyGate(Gate.T);
+    var zGateBtn = CreateImageButton("textures/z-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.Z);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(tGateBtn);
+    leftPanel.addControl(zGateBtn);
 
-    var tDagGateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/t-dag-gate.png");
-    tDagGateBtn.paddingTop = paddingTop;
-    tDagGateBtn.width = buttonSize;
-    tDagGateBtn.height = buttonSize;
-    tDagGateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.Tt);
-        blochSphere.applyGate(Gate.Tt);
+    var hGateBtn = CreateImageButton("textures/h-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.H);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(tDagGateBtn);
+    leftPanel.addControl(hGateBtn);
 
-    const rxmPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rx-mpi12-gate.png");
-    rxmPi8GateBtn.paddingTop = paddingTop;
-    rxmPi8GateBtn.width = buttonSize;
-    rxmPi8GateBtn.height = buttonSize;
-    rxmPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RxmPi8);
-        blochSphere.applyGate(Gate.RxmPi12);
+    addRadio("θ=π/8", true, leftPanel, () => {
+        rxp = Gate.RxPi8;
+        ryp = Gate.RyPi8;
+        rzp = Gate.RzPi8;
+        rxm = Gate.RxmPi8;
+        rym = Gate.RymPi8;
+        rzm = Gate.RzmPi8;
+    });
+
+    var rxPi12GateBtn = CreateImageButton("textures/rx+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rxp);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(rxmPi8GateBtn);
+    leftPanel.addControl(rxPi12GateBtn);
 
-    const rymPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/ry-mpi12-gate.png");
-    rymPi8GateBtn.paddingTop = paddingTop;
-    rymPi8GateBtn.width = buttonSize;
-    rymPi8GateBtn.height = buttonSize;
-    rymPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RymPi8);
-        blochSphere.applyGate(Gate.RymPi12);
+    var ryPi12GateBtn = CreateImageButton("textures/ry+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(ryp);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(rymPi8GateBtn);
+    leftPanel.addControl(ryPi12GateBtn);
 
-    const rzmPi8GateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/rz-mpi12-gate.png");
-    rzmPi8GateBtn.paddingTop = paddingTop;
-    rzmPi8GateBtn.width = buttonSize;
-    rzmPi8GateBtn.height = buttonSize;
-    rzmPi8GateBtn.onPointerDownObservable.add(() => {
-        console.log(Gate.RzmPi8);
-        blochSphere.applyGate(Gate.RzmPi12);
+    var rzPi12GateBtn = CreateImageButton("textures/rz+gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rzp);
         updateQuantumStateDisplay(config);
     });
-    rightPanel.addControl(rzmPi8GateBtn);
+    leftPanel.addControl(rzPi12GateBtn);
 
-    var oneStateBtn = BABYLON.GUI.Button.CreateImageOnlyButton("but", "textures/one-state.png");
-    oneStateBtn.paddingTop = paddingTop;
-    oneStateBtn.width = buttonSize;
-    oneStateBtn.height = buttonSize;
-    oneStateBtn.onPointerDownObservable.add(() => {
+    var oneStateBtn = CreateImageButton("textures/one-state.png", buttonSize, paddingTop, () => {
         blochSphere.setProbAmplitudes(math.complex(0, 0), math.complex(1, 0));
         updateQuantumStateDisplay(config);
     });
     rightPanel.addControl(oneStateBtn);
 
+    var sGateBtn = CreateImageButton("textures/s-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.S);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(sGateBtn);
+
+    var sDagGateBtn = CreateImageButton("textures/s-dag-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.St);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(sDagGateBtn);
+
+    var tGateBtn = CreateImageButton("textures/t-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.T);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(tGateBtn);
+
+    var tDagGateBtn = CreateImageButton("textures/t-dag-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(Gate.Tt);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(tDagGateBtn);
+
+    addRadio("θ=π/12", false, rightPanel,  () => {
+        rxp = Gate.RxPi12;
+        ryp = Gate.RyPi12;
+        rzp = Gate.RzPi12;
+        rxm = Gate.RxmPi12;
+        rym = Gate.RymPi12;
+        rzm = Gate.RzmPi12;
+    });
+
+    var rxmPi12GateBtn = CreateImageButton("textures/rx-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rxm);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(rxmPi12GateBtn);
+
+    var rymPi12GateBtn = CreateImageButton("textures/ry-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rym);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(rymPi12GateBtn);
+
+    var rzmPi12GateBtn = CreateImageButton("textures/rz-gate.png", buttonSize, paddingTop, () => {
+        blochSphere.applyGate(rzm);
+        updateQuantumStateDisplay(config);
+    });
+    rightPanel.addControl(rzmPi12GateBtn);
+   
     /////// END Gates panel
 
 
@@ -352,11 +286,6 @@ function createScene(engine, canvas, config) {
     qubitStateDiracTextBlock.text = "Dirac notation will go here";
     qubitStateDiracTextBlock.color = "black";
     qubitStateDiracTextBlock.fontSize = config.fontSize;
-
-    // qubitStateDiracPanel.width = "728px";
-    // qubitStateDiracPanel.height = "163px";
-    // qubitStateDiracPanel.
-    //
     /////// END Top panel
 
 
@@ -397,9 +326,7 @@ function createScene(engine, canvas, config) {
 
 
     // Grid
-    //var grid = new BABYLON.GUI.Grid();
-    // quantumStateGrid.background = "black";
-    // quantumStateGrid.adaptWidthToChildren = true;
+ 
     quantumStateGrid.width = adaptRatioStr(300);
     quantumStateGrid.height = adaptRatioStr(80);
 
@@ -408,9 +335,6 @@ function createScene(engine, canvas, config) {
     quantumStateGrid.addColumnDefinition(0.30);
     quantumStateGrid.addRowDefinition(0.50);
     quantumStateGrid.addRowDefinition(0.50);
-
-    // quantumStateGrid.addControl(basisLabel0, 0, 1);
-    // quantumStateGrid.addControl(basisLabel1, 1, 1);
 
     UiPanel.addControl(quantumStateGrid);
     /////// END Bottom panel
@@ -665,7 +589,6 @@ function updateQuantumStateDisplay(config) {
     probabilityTextBlock1.fontSize = config.fontSize;
 
     azimuthRadiansTextBlock.dispose();
-    //azimuthRadiansTextBlock.text = (blochSphere.getAzimuthRadians() / Math.PI).toFixed(2) + "π";
     azimuthRadiansTextBlock.text = azimuthRadiansToPiRadians(blochSphere.getAzimuthRadians());
     azimuthRadiansTextBlock.color = "black";
     azimuthRadiansTextBlock.fontSize = config.fontSize * 0.7;
@@ -673,41 +596,12 @@ function updateQuantumStateDisplay(config) {
 
     quantumStateGrid.addControl(probAmplitudeTextBlock0, 0, 0);
     quantumStateGrid.addControl(probAmplitudeTextBlock1, 1, 0);
-    //quantumStateGrid.addControl(probabilityTextBlock0, 0, 2);
-    //quantumStateGrid.addControl(probabilityTextBlock1, 1, 2);
-
 
     ////// Update Dirac notation
     quantumStateDiracGrid.addControl(probabilityTextBlock0, 1, 1)
     quantumStateDiracGrid.addControl(probabilityTextBlock1, 1, 3)
     quantumStateDiracGrid.addControl(azimuthRadiansTextBlock, 0, 5)
-        ////// END Update Dirac notation
+     ////// END Update Dirac notation
 
-
-    ////// Update Quantum Phase display
-    // if (vectorPasted) {
-    //     ground.visibility = 0;
-    // } else {
-    //     ground.visibility = 1;
-    // }
     quantumPhaseDisk.updateQuantumPhaseArrow();
-
-    // let quantumPhaseCartesianCoords = getQuantumPhaseCartesianCoords();
-    //
-    // //Array of points to construct Bloch X axis line
-    // quantumPhasePoints = [
-    //     quantumPhaseCylinder.position,
-    //     //new BABYLON.Vector3(0, 0, 2)
-    //     quantumPhaseCartesianCoords
-    // ];
-
-    // if (quantumPhaseLine) quantumPhaseLine.dispose();
-    // quantumPhaseLine =
-    //     BABYLON.MeshBuilder.CreateLines("quantumPhasePoints",
-    //         {points: quantumPhasePoints}, this.scene);
-    // quantumPhaseLine.color = new BABYLON.Color3(0, 0, 0);
-    // quantumPhaseLine.width = 5;
-
-
-    ////// END Update Quantum Phase display
 }
