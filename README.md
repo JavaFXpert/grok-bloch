@@ -13,8 +13,9 @@ you can download this repo and run it from a Web server. If you have python, you
   
   > Python 2 > python -m SimpleHTTPServer 8000
 
-open a brownser with the next URL [http://127.0.0.1:8000]
+open a browser with the next URL [http://127.0.0.1:8000]
 
 # 🍿Credits
 
 Original project from [James Weaver](https://github.com/JavaFXpert)
+Lots of awesomeness added by [Ismael Faro Sertage](https://github.com/ismaelfaro)
